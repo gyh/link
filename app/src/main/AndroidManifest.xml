@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.market.ljw">
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name="com.example.market.ljw.common.frame.AppContext"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <!--	渠道商编号，其中 name 请不要改，将 value 修改为渠道商编号。渠道名称请到 mtj.baidu.com的渠道管理中修改	 -->
+        <meta-data
+            android:name="BaiduMobAd_CHANNEL"
+            android:value="Baidu Market" />
+        <!--	 您从百度网站获取的 APP	KEY	-->
+        <meta-data
+            android:name="BaiduMobAd_STAT_ID"
+            android:value="8ab5479698" />
+        <!-- 是否开启错误日志统计，默认为false -->
+        <meta-data android:name="BaiduMobAd_EXCEPTION_LOG" android:value="true" />
+        <!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
+        <meta-data android:name="BaiduMobAd_SEND_STRATEGY" android:value="APP_START" />
+        <!-- 日志发送策略 为SET_TIME_INTERVAL时，需设定时间间隔(取消下行注释)。取值为1-24的整数，默认为1 -->
+        <!-- <meta-data android:name="BaiduMobAd_TIME_INTERVAL" android:value="2" />  -->
+        <!-- 日志仅在wifi网络下发送，默认为false -->
+        <meta-data android:name="BaiduMobAd_ONLY_WIFI" android:value="false" />
+        <!-- 是否获取基站位置信息 ,默认为true-->
+        <meta-data android:name="BaiduMobAd_CELL_LOCATION" android:value="true" />
+        <!-- 是否获取GPS位置信息，默认为true -->
+        <meta-data android:name="BaiduMobAd_GPS_LOCATION" android:value="true" />
+        <!-- 是否获取WIFI位置信息，默认为true -->
+        <meta-data android:name="BaiduMobAd_WIFI_LOCATION" android:value="true" />
+
+        <activity
+            android:name=".ui.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/welcomeTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LJWActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.TimeTestActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+        <provider
+            android:name=".db.provider.DataProvider"
+            android:authorities="com.example.market.ljw"
+            android:exported="false" />
+
+        <activity android:name=".function.lockscreen.LockSettingActivity" />
+        <activity android:name=".function.glowpadview.LockActivity" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.BaseActivityTest"/>
+        <!--<service android:name=".function.lockscreen.MyLockScreenService">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.SCREEN_OFF" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+        <service android:name=".function.service.TimeService"/>
+        <service android:name=".function.service.FxService"/>
+        <receiver android:name="com.example.market.ljw.receiver.DownloadCompleteReceiver">
+            <intent-filter>
+                <action android:name="com.qlf.broadCastFlag">
+                </action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".LJWActivity$alarmreceiver"/>
+        <receiver android:name=".ui.TimeTestActivity$alarmreceiver"/>
+    </application>
+
+</manifest>

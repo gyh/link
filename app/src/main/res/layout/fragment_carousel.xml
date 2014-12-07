@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <com.example.market.ljw.utils.view.HackyViewPager
+        android:id="@+id/carousel_viewpage"
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/carousel_viewpage"
+        android:gravity="center"
+        android:id="@+id/indexpoint_parent"
+        android:layout_marginTop="-5dp"
+        android:orientation="horizontal">
+    </LinearLayout>
+</RelativeLayout>

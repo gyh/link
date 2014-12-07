@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style type="text/css">
+        #div1 {width:488px;height:70px;padding:10px;border:1px solid #aaaaaa;}
+    </style>
+    <script type="text/javascript">
+function allowDrop(ev)
+{
+ev.preventDefault();
+}
+
+function drag(ev)
+{
+ev.dataTransfer.setData("Text",ev.target.id);
+}
+
+function drop(ev)
+{
+ev.preventDefault();
+var data=ev.dataTransfer.getData("Text");
+ev.target.appendChild(document.getElementById(data));
+}
+
+function getFromAndroid(str){
+        document.getElementByIdx_x_x_x("android").innerHTML=str;
+}
+
+    </script>
+</head>
+<body>
+
+<p>W3School</p>
+
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<br/>
+<img id="drag1" src="http://f.hiphotos.baidu.com/image/w%3D310/sign=f306ac8b0d2442a7ae0efba4e143ad95/4bed2e738bd4b31cea5602b385d6277f9e2ff854.jpg" draggable="true" ondragstart="drag(event)"/>
+
+</body>
+</html>

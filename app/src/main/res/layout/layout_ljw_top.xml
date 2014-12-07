@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/theme"
+    android:gravity="center_vertical"
+    android:minHeight="48dp"
+    android:paddingLeft="@dimen/padding_middle"
+    android:paddingRight="@dimen/padding_middle">
+    <ImageView
+        android:id="@+id/logimg"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_launcher"/>
+    <TextView
+        android:id="@+id/tvusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="账号："
+        android:minWidth="100dp"
+        style="@style/top_text"
+        android:gravity="left"
+        />
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="20dp"
+        android:layout_margin="4dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/tvnumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="积分：0"
+        android:minWidth="60dp"
+        style="@style/top_text"
+        android:gravity="left"/>
+
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="20dp"
+        android:layout_margin="4dp"
+        android:background="@color/white" />
+    <TextView
+        android:visibility="visible"
+        android:id="@+id/tvtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="在线时间：00:00:00"
+        android:layout_weight="2"
+        style="@style/top_text"
+        />
+</LinearLayout>
