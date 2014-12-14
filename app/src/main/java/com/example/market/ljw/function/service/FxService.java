@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.market.ljw.LJWActivity;
+import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.common.frame.AppContext;
 import com.example.market.ljw.function.glowpadview.LockActivity;
@@ -111,7 +112,7 @@ public class FxService extends Service {
             @Override
             public void onClick(View view) {
                 if (AppContext.getInstance().getBaseActivity() != null) {
-                    Intent it = new Intent(FxService.this, LJWActivity.class);
+                    Intent it = new Intent(FxService.this, MainActivity.class);
                     it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
                     startActivity(it);

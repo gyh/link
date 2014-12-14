@@ -33,6 +33,7 @@ import com.example.market.ljw.utils.Constant;
 import com.example.market.ljw.utils.DateUtils;
 import com.example.market.ljw.utils.PopUtils;
 import com.example.market.ljw.utils.PromptUtil;
+import com.example.market.ljw.utils.Util;
 import com.example.market.ljw.utils.Utils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -43,7 +44,7 @@ import java.util.Map;
 import static java.lang.Thread.sleep;
 
 
-public class LJWActivity extends BaseActivity {
+public class MainActivity extends BaseActivity {
 
     private Member member;//本地的用户数据信息
     private TextView tvusername;//用户名显示view
@@ -56,26 +57,19 @@ public class LJWActivity extends BaseActivity {
     private long intervalTime = 10; //定义的心跳
     private boolean isRunning = false;//定义是否开启线程
     private Intent intentfxService;//悬浮窗口配置
-    private boolean isCanAddscore = true;//定义是否能够增加积分
+    private String setTimeSystem = "0";//初始化提交时间
+    private boolean isCanAddscore = true;
 
     Handler durhandler = new Handler() {//积分获取后改变的ui线程
         @Override
         public void handleMessage(Message msg) {
-            if (isCanAddscore) {
-                if(Constant.TheOtherSystem.XIAOMI.equals(Utils.getPhoneSystemInfo())&&!Constant.isShowLock){//如果是小米手机在不开锁涨停下载
-
-                }else {
-                    curDuration++;
-                }
-            } else {
+            if(!isCanAddscore){
                 curDuration = 0;
                 tvnumber.setText("积分：0");
             }
             DateUtils.setCurTimeToView(tvtime, curDuration);
-            sendMessageDelayed(obtainMessage(1), delayMillis);// 获得顶部信息并延时发送
         }
     };
-
     Handler refhandler = new Handler() {//积分获取后改变的ui线程
         @Override
         public void handleMessage(Message msg) {
@@ -93,47 +87,13 @@ public class LJWActivity extends BaseActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
         AppListFragment.AppListFragmentTM appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
         ApplicationManager.go(appListFragmentTM);
-        setBroadcastOfNo();//设置锁屏后继续计算分
         getMemberInfo();//开始
     }
-
-
-    /**
-     * 设置锁屏后及时继续
-     * */
-    private void setBroadcastOfNo(){
-        Intent intent =new Intent(LJWActivity.this, alarmreceiver.class);
-        intent.setAction("repeating");
-        PendingIntent sender=PendingIntent.getBroadcast(LJWActivity.this, 0, intent, 0);
-        //开始时间
-        long firstime=SystemClock.elapsedRealtime();
-        AlarmManager am=(AlarmManager)getSystemService(ALARM_SERVICE);
-        //5秒一个周期，不停的发送广播
-        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstime, 1000, sender);
-    }
-
-
-    /**
-     * 设置不锁广播
-     * */
-    public static class alarmreceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-        }
-    }
-
 
     @Override
     protected void onResume() {
         super.onResume();
         Constant.theNextLen = 10;//重置倒计时时间
-        Constant.isShowLock = true;//充值
-        if (Constant.TheOtherSystem.XIAOMI.equals(Utils.getPhoneSystemInfo())) {
-            curDuration = curDuration + Constant.TimeSystemCal.calResult;
-            Constant.TimeSystemCal.calResult = 0;
-        }
-
-
     }
 
     @Override
@@ -181,16 +141,14 @@ public class LJWActivity extends BaseActivity {
 
     /**
      * 获取数据成功后初始化流程
-     * */
-    private void initLJWPrcoss(MemberOutput memberOuput){
+     */
+    private void initLJWPrcoss(MemberOutput memberOuput) {
         isRunning = true;
         member = memberOuput.getMember();
-        isCanAddscore = Utils.isCanAddScore(member.getServerTime());
         curDuration = member.getDuration();
         intervalTime = Long.valueOf(member.getClientSubmitInterval());
+        isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
         initView();
-        durhandler.removeMessages(1);
-        durhandler.sendEmptyMessage(1);
         initData();
         initService();
     }
@@ -202,7 +160,7 @@ public class LJWActivity extends BaseActivity {
         logimg = findViewById(R.id.logimg);
         ljwview = findViewById(R.id.layoutljw);
         int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             ljwview.setBackgroundDrawable(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
         } else {
             ljwview.setBackground(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
@@ -210,10 +168,12 @@ public class LJWActivity extends BaseActivity {
         tvusername = (TextView) findViewById(R.id.tvusername);
         tvnumber = (TextView) findViewById(R.id.tvnumber);
         tvtime = (TextView) findViewById(R.id.tvtime);
+        tvusername.setText("账号：" + member.getLoginName());
+        tvnumber.setText("积分：" + member.getTodayScore());
         logimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getCurrentMyActivity() instanceof WebViewFragment){
+                if (getCurrentMyActivity() instanceof WebViewFragment) {
                     ApplicationManager.back();
                 }
             }
@@ -224,8 +184,6 @@ public class LJWActivity extends BaseActivity {
      * 初始化数据，开启提交积分线程
      */
     private void initData() {
-        tvusername.setText("账号：" + member.getLoginName());
-        tvnumber.setText("积分：" + member.getTodayScore());
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -233,34 +191,38 @@ public class LJWActivity extends BaseActivity {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
                 while (isRunning) {//提交数据循环
                     try {
-                        if (!Utils.isNetworkConnected(LJWActivity.this)) {//判断是否有网络
+                        sleep(delayMillis);//心跳时间
+                        curDuration++;//时间增加
+                        isCanAddscore = Utils.isNetworkConnected(MainActivity.this);
+                        if (!Utils.isNetworkConnected(MainActivity.this)) {//判断是否有网络
                             //没有网络的时候
-                            isCanAddscore = Utils.isCanAddScore("");//判断是否能够增加积分
-                            continue;
+                            if (!isCanAddscore) {
+                                curDuration = 0;
+                            }
                         } else {
                             //有网络的时候
-                            if (curDuration == 0) {//判断当前的时间是否是开始时间 标志是0,计时是没有效果
-                                getMemberInfo();//重新获取用户信息
-                                isRunning = false;//结束当前的线程
-                                break;
+                            if (setTimeSystem.equals("0")) {
+                                setTimeSystem = Utils.getCurrentDate();
+                                setDataToService();
+                            } else if (Utils.calculationDurFrom(setTimeSystem, Utils.getCurrentDate())
+                                    >= intervalTime * delayMillis) {
+                                setTimeSystem = Utils.getCurrentDate();
+                                setDataToService();
                             }
                         }
-                        //如果有网络，并且当前不是开始时间，则向服务器提交积分
-                        setDataToService();
-                        sleep(intervalTime * delayMillis);//心跳时间
+                        durhandler.sendEmptyMessage(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }).start();
-
     }
 
     /**
      * 向服务器提交积分
-     * */
-    private void setDataToService(){
+     */
+    private void setDataToService() {
         //准备提交数据
         Map<String, Object> param = new LinkedHashMap<String, Object>();
         param.put(Constant.RequestKeys.SERVICENAME, "submit_score");
@@ -297,7 +259,7 @@ public class LJWActivity extends BaseActivity {
      * 初始化服务
      */
     private void initService() {
-        intentfxService = new Intent(LJWActivity.this, FxService.class);
+        intentfxService = new Intent(MainActivity.this, FxService.class);
         if (!Utils.isServiceRunning(this, FxService.class.getName())) {
             startService(intentfxService);//开启浮动窗口服务
         }
@@ -332,7 +294,7 @@ public class LJWActivity extends BaseActivity {
             if (BackStackManager.getInstance().isLast()) {
                 // 创建退出对话框
                 final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
-                PromptUtil.showExitAlert(dialogBuilder, LJWActivity.this, Effectstype.Fall, ljwview,
+                PromptUtil.showExitAlert(dialogBuilder, MainActivity.this, Effectstype.Fall, ljwview,
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -343,7 +305,7 @@ public class LJWActivity extends BaseActivity {
                         });
             }
             if (getCurrentMyActivity() instanceof WebViewFragment && WebViewFragment.mWebView.canGoBack()) {
-                    WebViewFragment.mWebView.goBack();
+                WebViewFragment.mWebView.goBack();
                 return true;
             } else {
                 ApplicationManager.back();
@@ -351,6 +313,4 @@ public class LJWActivity extends BaseActivity {
         }
         return false;
     }
-
-
 }

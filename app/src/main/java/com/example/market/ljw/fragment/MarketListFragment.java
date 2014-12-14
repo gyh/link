@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.example.market.ljw.LJWActivity;
+import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.bean.AppsItemInfo;
 import com.example.market.ljw.common.frame.AppContext;
@@ -144,7 +145,7 @@ public class MarketListFragment extends MyActivity implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        ((LJWActivity)getBaseActivity()).showWebView(0, urlList.get(i));
+        ((MainActivity)getBaseActivity()).showWebView(0, urlList.get(i));
     }
 
     /**

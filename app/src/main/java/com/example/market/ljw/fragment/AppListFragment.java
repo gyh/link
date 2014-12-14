@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.market.ljw.LJWActivity;
+import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.bean.AppsItemInfo;
 import com.example.market.ljw.common.frame.MyActivity;
@@ -141,7 +142,7 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
 
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (i == 0) {
-            ((LJWActivity)getBaseActivity()).showMarkList();
+            ((MainActivity)getBaseActivity()).showMarkList();
         } else {
             if (intentList.get(i) != null) {
                 Constant.makeAppName = intentList.get(i).getPackage();

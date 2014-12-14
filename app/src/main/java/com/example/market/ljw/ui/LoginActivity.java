@@ -8,6 +8,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.market.ljw.LJWActivity;
+import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.bean.Entity;
 import com.example.market.ljw.bean.input.LoginUser;
@@ -197,7 +198,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     setDataForShPre(Constant.SaveKeys.TOKENKEY,loginOutput.getToken());
                     reCheckbox();//检查选择框设置，存储用户信息
                     Intent intent = new Intent();//跳转流程
-                    intent.setClass(LoginActivity.this, LJWActivity.class);
+                    intent.setClass(LoginActivity.this, MainActivity.class);
                     intent.putExtra(Constant.ExtraKey.MEMBER,loginOutput.getMember());
                     intent.putExtra(Constant.FromWhere.KEY,Constant.FromWhere.LOGINACTIVITY);
                     startActivity(intent);

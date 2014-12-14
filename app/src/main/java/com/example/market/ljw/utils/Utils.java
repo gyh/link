@@ -241,13 +241,6 @@ public class Utils {
         Drawable wallpaperDrawable = wallpaperManager.getDrawable();
         //将Drawable,转成Bitmap
         Bitmap bm = ((BitmapDrawable) wallpaperDrawable).getBitmap();
-
-//        float step = 0;
-//        //计算出屏幕的偏移量
-//        step = (bm.getWidth() - 480) / (7 - 1);
-//        //截取相应屏幕的Bitmap
-//        Bitmap pbm = Bitmap.createBitmap(bm, (int) (5 * step), 0, 480, 854);
-        //设置 背景
         return bm;
     }
 
