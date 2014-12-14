@@ -127,10 +127,13 @@ public class LJWActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Constant.theNextLen = 10;//重置倒计时时间
+        Constant.isShowLock = true;//充值
         if (Constant.TheOtherSystem.XIAOMI.equals(Utils.getPhoneSystemInfo())) {
             curDuration = curDuration + Constant.TimeSystemCal.calResult;
             Constant.TimeSystemCal.calResult = 0;
         }
+
+
     }
 
     @Override

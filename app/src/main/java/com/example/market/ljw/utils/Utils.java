@@ -17,8 +17,10 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import com.example.market.ljw.bean.AppsItemInfo;
+import com.example.market.ljw.common.frame.AppContext;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -270,9 +272,9 @@ public class Utils {
     public static boolean isCanAddScore(String timeStr){
        String hour = "0";
        if("".equals(timeStr)){
-           SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
+           SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
            try {
-               Date timeb = df.parse(timeStr);
+               Date timeb = df.parse(getCurrentDate());
                hour = timeb.getHours()+"";
            } catch (ParseException e) {
                e.printStackTrace();

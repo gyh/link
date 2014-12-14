@@ -108,9 +108,7 @@ public class WelcomeActivity extends BaseActivity implements CheckUpdateListener
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //TODO 临时设置跳转
         Intent intent = new Intent();
-//        intent.setClass(WelcomeActivity.this, BaseActivityTest.class);
         intent.setClass(WelcomeActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
