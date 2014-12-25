@@ -31,9 +31,10 @@ import com.example.market.ljw.function.service.FxService;
 import com.example.market.ljw.service.InputDataUtils;
 import com.example.market.ljw.utils.Constant;
 import com.example.market.ljw.utils.DateUtils;
+import com.example.market.ljw.utils.MiaoshaUtil;
+import com.example.market.ljw.utils.MyCountdownTimer;
 import com.example.market.ljw.utils.PopUtils;
 import com.example.market.ljw.utils.PromptUtil;
-import com.example.market.ljw.utils.Util;
 import com.example.market.ljw.utils.Utils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -53,29 +54,22 @@ public class MainActivity extends BaseActivity {
     private View ljwview;//背景视图
     private View logimg;
     private final long delayMillis = 1000;//定义的一秒
-    private long curDuration = 0;   //定义在线时间
+//    private long curDuration = 0;   //定义在线时间
     private long intervalTime = 10; //定义的心跳
     private boolean isRunning = false;//定义是否开启线程
     private Intent intentfxService;//悬浮窗口配置
-    private String setTimeSystem = "0";//初始化提交时间
+    private long mRequetTimeInFuture = 0;//记录上一次提交时间
     private boolean isCanAddscore = true;
-
-    Handler durhandler = new Handler() {//积分获取后改变的ui线程
-        @Override
-        public void handleMessage(Message msg) {
-            if(!isCanAddscore){
-                curDuration = 0;
-                tvnumber.setText("积分：0");
-            }
-            DateUtils.setCurTimeToView(tvtime, curDuration);
-        }
-    };
+    //倒计时工具类
+    private MiaoshaUtil localMiaoShaUtil;
     Handler refhandler = new Handler() {//积分获取后改变的ui线程
         @Override
         public void handleMessage(Message msg) {
             tvnumber.setText("积分：" + member.getTodayScore());
+            DateUtils.setCurTimeToView(tvtime, member.getDuration());
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +91,16 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         isRunning = false;//结束积分线程
-        durhandler.removeMessages(1);
+        if (localMiaoShaUtil != null)
+            localMiaoShaUtil.countdownCancel();
     }
 
     /**
@@ -143,14 +143,37 @@ public class MainActivity extends BaseActivity {
      * 获取数据成功后初始化流程
      */
     private void initLJWPrcoss(MemberOutput memberOuput) {
-        isRunning = true;
-        member = memberOuput.getMember();
-        curDuration = member.getDuration();
-        intervalTime = Long.valueOf(member.getClientSubmitInterval());
+        isRunning = true;//提交积分线程
+        member = memberOuput.getMember();//获取用户数据
+        intervalTime = Long.valueOf(member.getClientSubmitInterval());//心跳时间
         isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
         initView();
+        if (isCanAddscore) {
+            startTimeNum();
+        }
         initData();
         initService();
+    }
+
+    /**
+     * 开始计数
+     */
+    private void startTimeNum() {
+        localMiaoShaUtil = new MiaoshaUtil();//倒计时
+        localMiaoShaUtil.setCountdown(member.getDuration(), System.currentTimeMillis() + Constant.ENDTIME, new MiaoshaUtil.CountDownListener() {
+            @Override
+            public void changed(MyCountdownTimer paramMyCountdownTimer, long residueTime, long[] threeTimePoint, int what) {
+                member.setDuration((Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
+                System.out.println("gyh----" + (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
+                refhandler.sendEmptyMessage(1);
+            }
+            @Override
+            public boolean finish(MyCountdownTimer paramMyCountdownTimer, long endRemainTime, int what) {
+                member.setDuration(0);
+                refhandler.sendEmptyMessage(1);
+                return false;
+            }
+        });
     }
 
     /**
@@ -191,26 +214,24 @@ public class MainActivity extends BaseActivity {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
                 while (isRunning) {//提交数据循环
                     try {
-                        sleep(delayMillis);//心跳时间
-                        curDuration++;//时间增加
-                        isCanAddscore = Utils.isNetworkConnected(MainActivity.this);
+                        sleep(delayMillis*10);//心跳时间
                         if (!Utils.isNetworkConnected(MainActivity.this)) {//判断是否有网络
                             //没有网络的时候
-                            if (!isCanAddscore) {
-                                curDuration = 0;
+                            isCanAddscore = Utils.isCanAddScore("");
+                            if (!isCanAddscore && localMiaoShaUtil != null) {
+                                localMiaoShaUtil.countdownCancel();
+                                member.setDuration(0);
+                            } else if (isCanAddscore && member.getDuration() == 0) {
+                                startTimeNum();
                             }
                         } else {
                             //有网络的时候
-                            if (setTimeSystem.equals("0")) {
-                                setTimeSystem = Utils.getCurrentDate();
+                            if (mRequetTimeInFuture == 0) {
                                 setDataToService();
-                            } else if (Utils.calculationDurFrom(setTimeSystem, Utils.getCurrentDate())
-                                    >= intervalTime * delayMillis) {
-                                setTimeSystem = Utils.getCurrentDate();
+                            } else if ((member.getDuration() - mRequetTimeInFuture) >= intervalTime  / 2) {
                                 setDataToService();
                             }
                         }
-                        durhandler.sendEmptyMessage(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -223,11 +244,12 @@ public class MainActivity extends BaseActivity {
      * 向服务器提交积分
      */
     private void setDataToService() {
+        mRequetTimeInFuture = member.getDuration();
         //准备提交数据
         Map<String, Object> param = new LinkedHashMap<String, Object>();
         param.put(Constant.RequestKeys.SERVICENAME, "submit_score");
         param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.submitScore
-                (getDataForShPre(Constant.SaveKeys.TOKENKEY, ""), curDuration, member.getMemberID() + "")));
+                (getDataForShPre(Constant.SaveKeys.TOKENKEY, ""), member.getDuration(), member.getMemberID() + "")));
         execute(Constant.SERVER_URL, false, param, null, new HttpGroup.OnEndListener() {
             @Override
             public void onEnd(HttpResponse httpresponse) {
@@ -237,8 +259,14 @@ public class MainActivity extends BaseActivity {
                     //如果返回为空的话
                     member.setTodayScore(memberOuput.getMember().getTodayScore());//重新设置当日积分
                     member.setServerTime(memberOuput.getMember().getServerTime());//重新设置服务器时间
+//                    member.setDuration(memberOuput.getMember().getDuration());
                     isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
-                    refhandler.sendEmptyMessage(1);//更新积分数据
+                    if (!isCanAddscore && localMiaoShaUtil != null) {
+                        localMiaoShaUtil.countdownCancel();
+                        member.setDuration(0);
+                    } else if (isCanAddscore && member.getDuration() == 0) {
+                        startTimeNum();
+                    }
                 } else {
                     //返回错误的话
                     PopUtils.showToast(memberOuput.getErrmsg());

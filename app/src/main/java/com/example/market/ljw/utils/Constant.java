@@ -47,6 +47,8 @@ public class Constant {
     public final static int IMG_WIDTH = 640;
     public final static int IMG_HEIGHT = 150;
 
+    public final static long ENDTIME = 365*24*60*60*1000;
+
     public static boolean isShowLock = true;
 
     public final static String baiduAppkey = "12bf738d12";
