@@ -53,9 +53,7 @@ public class FxService extends Service {
                 mFloatLayout.setVisibility(View.VISIBLE);//如果不是则显示并且提交显示
                 Constant.theNextLen = Constant.theNextLen-1;
                 tvmsg.setText("积分系统将在（"+Constant.theNextLen+"）秒后关闭，请重新打开积分系统");
-                if(Constant.DEBUG){
-                    System.out.println("showpackname--"+Utils.getFirstTask(FxService.this));
-                }
+                Utils.showSystem("showpackname",Utils.getFirstTask(FxService.this));
                 if(AppContext.getInstance().getBaseActivity()!=null){
                     AppContext.getInstance().getBaseActivity().finish();
                 }

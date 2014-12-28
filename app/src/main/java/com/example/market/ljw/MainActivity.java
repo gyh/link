@@ -54,7 +54,6 @@ public class MainActivity extends BaseActivity {
     private View ljwview;//背景视图
     private View logimg;
     private final long delayMillis = 1000;//定义的一秒
-//    private long curDuration = 0;   //定义在线时间
     private long intervalTime = 10; //定义的心跳
     private boolean isRunning = false;//定义是否开启线程
     private Intent intentfxService;//悬浮窗口配置
@@ -147,6 +146,7 @@ public class MainActivity extends BaseActivity {
         member = memberOuput.getMember();//获取用户数据
         intervalTime = Long.valueOf(member.getClientSubmitInterval());//心跳时间
         isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
+        localMiaoShaUtil = new MiaoshaUtil();//倒计时
         initView();
         if (isCanAddscore) {
             startTimeNum();
@@ -159,17 +159,17 @@ public class MainActivity extends BaseActivity {
      * 开始计数
      */
     private void startTimeNum() {
-        localMiaoShaUtil = new MiaoshaUtil();//倒计时
-        localMiaoShaUtil.setCountdown(member.getDuration(), System.currentTimeMillis() + Constant.ENDTIME, new MiaoshaUtil.CountDownListener() {
+        localMiaoShaUtil.setCountdown(member.getDuration()*1000, System.currentTimeMillis() + Constant.ENDTIME, new MiaoshaUtil.CountDownListener() {
             @Override
             public void changed(MyCountdownTimer paramMyCountdownTimer, long residueTime, long[] threeTimePoint, int what) {
                 member.setDuration((Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
-                System.out.println("gyh----" + (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
+                Utils.showSystem("changed",""+(Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
                 refhandler.sendEmptyMessage(1);
             }
             @Override
             public boolean finish(MyCountdownTimer paramMyCountdownTimer, long endRemainTime, int what) {
                 member.setDuration(0);
+                member.setTodayScore(0);
                 refhandler.sendEmptyMessage(1);
                 return false;
             }
@@ -221,6 +221,8 @@ public class MainActivity extends BaseActivity {
                             if (!isCanAddscore && localMiaoShaUtil != null) {
                                 localMiaoShaUtil.countdownCancel();
                                 member.setDuration(0);
+                                member.setTodayScore(0);
+                                refhandler.sendEmptyMessage(1);
                             } else if (isCanAddscore && member.getDuration() == 0) {
                                 startTimeNum();
                             }
@@ -228,7 +230,7 @@ public class MainActivity extends BaseActivity {
                             //有网络的时候
                             if (mRequetTimeInFuture == 0) {
                                 setDataToService();
-                            } else if ((member.getDuration() - mRequetTimeInFuture) >= intervalTime  / 2) {
+                            } else if ((member.getDuration() - mRequetTimeInFuture) >= intervalTime  / 10) {
                                 setDataToService();
                             }
                         }
@@ -260,10 +262,13 @@ public class MainActivity extends BaseActivity {
                     member.setTodayScore(memberOuput.getMember().getTodayScore());//重新设置当日积分
                     member.setServerTime(memberOuput.getMember().getServerTime());//重新设置服务器时间
 //                    member.setDuration(memberOuput.getMember().getDuration());
+                    Utils.showSystem("duration",member.getDuration()+"");
                     isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
                     if (!isCanAddscore && localMiaoShaUtil != null) {
                         localMiaoShaUtil.countdownCancel();
                         member.setDuration(0);
+                        member.setTodayScore(0);
+                        refhandler.sendEmptyMessage(1);
                     } else if (isCanAddscore && member.getDuration() == 0) {
                         startTimeNum();
                     }

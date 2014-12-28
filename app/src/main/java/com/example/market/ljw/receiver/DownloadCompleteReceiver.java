@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.example.market.ljw.utils.Constant;
+import com.example.market.ljw.utils.Utils;
 
 import java.io.File;
 
@@ -30,9 +31,7 @@ public class DownloadCompleteReceiver extends BroadcastReceiver {
             if (c.moveToFirst()) {// 移动到最新下载的文件
                 fileName = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
             }
-            if(Constant.DEBUG){
-                System.out.println("======文件名称=====" + fileName);
-            }
+            Utils.showSystem("文件名称",fileName);
             File f = new File(fileName.replace("file://", ""));// 过滤路径
             Intent intent2 = new Intent();
             intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

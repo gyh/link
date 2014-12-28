@@ -203,7 +203,7 @@ public class MiaoshaUtil {
         } else if (startRemainTime <= 0 && endRemainTime <= 0) {
             what = MIAOSHA_FINISH;
         }
-        return endRemainTime - System.currentTimeMillis();
+        return endRemainTime - System.currentTimeMillis()-startRemainTime;
         //return endRemainTime-startRemainTime;
     }
 

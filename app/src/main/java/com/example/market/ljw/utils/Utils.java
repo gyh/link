@@ -133,34 +133,8 @@ public class Utils {
                 }
             }
         }
-        if(Constant.DEBUG){
-            System.out.println("packagename--"+appTask.get(0).baseIntent.getComponent().getPackageName());
-        }
+        Utils.showSystem("packagename",appTask.get(0).baseIntent.getComponent().getPackageName());
         appTask.clear();
-
-//        if(appTask.get(0).baseIntent.getComponent().getPackageName().equals(Constant.PACKAGENAME)){
-//            isShow = false;
-//        }else if(appTask.get(0).baseIntent.getComponent().getPackageName().equals(Constant.makeAppName)){
-//            isShow = false;
-//        }else if(appTask.get(1).baseIntent.getComponent().getPackageName().equals(Constant.PACKAGENAME)){
-//            List<ApplicationInfo> applicationInfos = Utils.getInstallAppInfo(context);
-//            boolean ishasin = false;
-//            for (int i = 0; i < applicationInfos.size(); i++) {
-//                ApplicationInfo pinfo = applicationInfos.get(i);
-//                Intent intent = context.getPackageManager().getLaunchIntentForPackage(pinfo.packageName);
-//                if (intent == null) {
-//                    continue;
-//                }
-//                if(Constant.PACKAGENAME.equals(pinfo.packageName)){
-//                    continue;
-//                }
-//                if(appTask.get(0).baseIntent.getComponent().getPackageName().equals(pinfo.packageName)){
-//                    ishasin = true;
-//                    break;
-//                }
-//            }
-//            isShow = !ishasin;
-//        }
         return isShow;
     }
 
@@ -272,14 +246,10 @@ public class Utils {
            } catch (ParseException e) {
                e.printStackTrace();
            }
-           if(Constant.DEBUG){
-               System.out.println("empty"+hour);// new Date()为获取当前系统时间
-           }
+           Utils.showSystem("empty","hour = "+hour);
        }else {
            hour = timeStr.substring(timeStr.indexOf("T")+1, timeStr.indexOf(":"));
-           if(Constant.DEBUG){
-               System.out.println("noempty"+hour);
-           }
+           Utils.showSystem("noempty","hour = "+hour);
        }
         if(Integer.valueOf(hour)<6){
             return false;
@@ -305,10 +275,7 @@ public class Utils {
      * 如果可以则判断第一个时间是否是在6点后，如果不是则将第一个时间改为6点，如果是，则计算返回差值
      * */
     public static long calculationDurFrom(String startstr,String endstr){
-        if(Constant.DEBUG){
-            System.out.println("startstr--"+startstr);
-            System.out.println("endstr---"+endstr);
-        }
+        Utils.showSystem("calculationDurFrom","startstr--"+startstr+"endstr---"+endstr);
         SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date begin;
         Date end;
@@ -357,9 +324,7 @@ public class Utils {
         SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date timeb = dfs.parse(timestr);
-            if(Constant.DEBUG){
-                System.out.println("isCanUseOfTime---"+timeb.getHours());
-            }
+            Utils.showSystem("isCanUseOfTime",timeb.getHours()+"");
             if(timeb.getHours()<6){
                 iscan = false;
             }else {
@@ -416,5 +381,14 @@ public class Utils {
             url = url + "?t=" + timstamp;
         }
         return url;
+    }
+
+    /**
+     * 测试打印
+     * */
+    public static void showSystem(String key,String context){
+        if(Constant.DEBUG){
+            System.out.println("gyh--"+key+"--" + context);
+        }
     }
 }
