@@ -100,6 +100,7 @@ public class MainActivity extends BaseActivity {
         isRunning = false;//结束积分线程
         if (localMiaoShaUtil != null)
             localMiaoShaUtil.countdownCancel();
+        Utils.showSystem("onDestroy",isRunning+"");
     }
 
     /**
@@ -230,7 +231,7 @@ public class MainActivity extends BaseActivity {
                             //有网络的时候
                             if (mRequetTimeInFuture == 0) {
                                 setDataToService();
-                            } else if ((member.getDuration() - mRequetTimeInFuture) >= intervalTime  / 10) {
+                            } else if ((member.getDuration() - mRequetTimeInFuture) >= intervalTime/2 || member.getDuration() - mRequetTimeInFuture<=0) {
                                 setDataToService();
                             }
                         }
