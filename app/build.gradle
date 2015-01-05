@@ -11,10 +11,19 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+
+        myConfig {
+            storeFile file("Key.store")
+            storePassword "16161616"
+            keyAlias "Key"
+            keyPassword "16161616"
+        }
+    }
+
     buildTypes {
         release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
         }
     }
 }
