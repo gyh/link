@@ -1,11 +1,6 @@
 package com.example.market.ljw.fragment;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.os.Message;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +15,10 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.AppContext;
 import com.example.market.ljw.common.frame.MyActivity;
 import com.example.market.ljw.common.frame.taskstack.NeedShowAgainModule;
-import com.example.market.ljw.common.frame.taskstack.TaskModule;
-import com.example.market.ljw.common.http.SessionManager;
 import com.example.market.ljw.utils.Constant;
 import com.example.market.ljw.utils.PromptUtil;
-import com.example.market.ljw.utils.Utils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
@@ -61,6 +52,15 @@ public class WebViewFragment extends MyActivity {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);//设置页面可以弹出框
 
         mWebView.setWebChromeClient(new MyWebChromeClient());//设置弹出框
+
+        //WebView cookies清理
+        CookieSyncManager.createInstance(getBaseActivity());
+        CookieSyncManager.getInstance().startSync();
+        CookieManager.getInstance().removeSessionCookie();
+        //清理cache 和历史记录的方法：
+        mWebView.clearCache(true);
+        mWebView.clearHistory();
+
 
         //加载网页
         String url = getArguments().getString(Constant.ValueKey.URLKEY);
@@ -130,6 +130,7 @@ public class WebViewFragment extends MyActivity {
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
     }
+
     /**
      * 商场
      */

@@ -44,7 +44,7 @@ public class CarouselFragment extends MyActivity {
     //适配器
     private ImageAdapter imageAdapter;
     //自动轮询间隔
-    private int carouselTime = 5000;
+    private int carouselTime = 2000;
     private View fragmentview;
 
     //轮询通知操作
@@ -203,14 +203,18 @@ public class CarouselFragment extends MyActivity {
 
     @Override
     public void onResume() {
-        handler.removeMessages(1);
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        handler.removeMessages(1);
         super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeMessages(1);
     }
 
     /**
