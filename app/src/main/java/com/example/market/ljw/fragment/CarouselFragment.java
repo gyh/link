@@ -21,6 +21,7 @@ import com.example.market.ljw.utils.Constant;
 import com.example.market.ljw.utils.DPIUtil;
 import com.example.market.ljw.utils.ImageAdapter;
 import com.example.market.ljw.utils.PopUtils;
+import com.example.market.ljw.utils.Utils;
 import com.example.market.ljw.utils.view.HackyViewPager;
 import com.google.gson.Gson;
 
@@ -112,34 +113,53 @@ public class CarouselFragment extends MyActivity {
      * http://markettest.strosoft.com/API/Service.ashx?service_name=get_advertisement_list&data={AdvertisementTypeCode:%27product%27}
      * */
     private void initData(){
-        Gson gson = new Gson();
-        Map<String, Object> param = new LinkedHashMap<String, Object>();
-        param.put(Constant.RequestKeys.SERVICENAME, "get_advertisement_list");
-        param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.getPics()));
-        getBaseActivity().execute(Constant.SERVER_URL, false, param, null, new HttpGroup.OnEndListener() {
-            @Override
-            public void onEnd(HttpResponse httpresponse) {
-                AdvertisementOutput advertisementOutput = (AdvertisementOutput) httpresponse.getResultObject();
-                if (advertisementOutput.isSuccess()) {
-                    imageurls = new ArrayList<String>();
-                    for (int i = 0; i < advertisementOutput.getAdvertisements().size(); i++) {
-                        imageurls.add(Constant.SERVERBASE_URL + advertisementOutput.getAdvertisements().get(i).getImageUrl());
+        if(Utils.isNetworkConnected(getBaseActivity())){
+            Gson gson = new Gson();
+            Map<String, Object> param = new LinkedHashMap<String, Object>();
+            param.put(Constant.RequestKeys.SERVICENAME, "get_advertisement_list");
+            param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.getPics()));
+            getBaseActivity().execute(Constant.SERVER_URL, false, param, null, new HttpGroup.OnEndListener() {
+                @Override
+                public void onEnd(HttpResponse httpresponse) {
+                    AdvertisementOutput advertisementOutput = (AdvertisementOutput) httpresponse.getResultObject();
+                    if (advertisementOutput.isSuccess()) {
+                        imageurls = new ArrayList<String>();
+                        for (int i = 0; i < advertisementOutput.getAdvertisements().size(); i++) {
+                            imageurls.add(Constant.SERVERBASE_URL + advertisementOutput.getAdvertisements().get(i).getImageUrl());
+                        }
+                        //记录本地----
+                        Constant.imageurls.clear();
+                        Constant.imageurls.addAll(imageurls);
+                        //------记录本地结束
+                        initPagerPic();
+                        handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
+                    } else {
+                        fragmentview.setVisibility(View.GONE);
+                        PopUtils.showToast(advertisementOutput.getErrmsg());
                     }
-                    initPagerPic();
-                    handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
-                } else {
-                    fragmentview.setVisibility(View.GONE);
-                    PopUtils.showToast(advertisementOutput.getErrmsg());
                 }
+            }, new HttpGroup.OnParseListener() {
+                @Override
+                public Entity onParse(String result) {
+                    AdvertisementOutput advertisementOutput = new AdvertisementOutput();
+                    advertisementOutput.setContent(result);
+                    return advertisementOutput;
+                }
+            });
+        }else {
+            imageurls = new ArrayList<String>();
+            imageurls.clear();
+            //判断本地存储是否为空
+            if(Constant.imageurls.size()  == 0){
+                //如果为空，则隐藏
+                fragmentview.setVisibility(View.GONE);
+            }else {
+                //不为空则显示图片
+                imageurls.addAll(Constant.imageurls);
+                initPagerPic();
+                handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
             }
-        }, new HttpGroup.OnParseListener() {
-            @Override
-            public Entity onParse(String result) {
-                AdvertisementOutput advertisementOutput = new AdvertisementOutput();
-                advertisementOutput.setContent(result);
-                return advertisementOutput;
-            }
-        });
+        }
     }
 
     /**

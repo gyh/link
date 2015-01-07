@@ -64,6 +64,7 @@ public class MainActivity extends BaseActivity {
     Handler refhandler = new Handler() {//积分获取后改变的ui线程
         @Override
         public void handleMessage(Message msg) {
+            Constant.member = member;
             tvnumber.setText("积分：" + member.getTodayScore());
             DateUtils.setCurTimeToView(tvtime, member.getDuration());
         }
@@ -107,44 +108,44 @@ public class MainActivity extends BaseActivity {
      * 获取用户信息
      */
     private void getMemberInfo() {
+        Utils.showSystem("getMemberInfo","-----重新开始初始化");
         Intent ljwintent = getIntent();
         if (Constant.FromWhere.LOGINACTIVITY.equals(ljwintent.getStringExtra(Constant.FromWhere.KEY))) {
             member = (Member) getIntent().getSerializableExtra(Constant.ExtraKey.MEMBER);
             Constant.member = member;
-        } else if (Constant.FromWhere.FXSERVICE.equals(ljwintent.getStringExtra(Constant.FromWhere.KEY))) {
-            member = Constant.member;
-        }
-        Map<String, Object> param = new LinkedHashMap<String, Object>();
-        param.put(Constant.RequestKeys.SERVICENAME, "get_member_info");
-        param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.getUserInfo(member.getID() + "")));
-        execute(Constant.SERVER_URL, true, param, null, new HttpGroup.OnEndListener() {
-            @Override
-            public void onEnd(HttpResponse httpresponse) {
-                MemberOutput memberOuput = (MemberOutput) httpresponse.getResultObject();
-                if (memberOuput.isSuccess()) {
-                    initLJWPrcoss(memberOuput);
-                } else {
-                    PopUtils.showToast(memberOuput.getErrmsg());
+            Map<String, Object> param = new LinkedHashMap<String, Object>();
+            param.put(Constant.RequestKeys.SERVICENAME, "get_member_info");
+            param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.getUserInfo(member.getID() + "")));
+            execute(Constant.SERVER_URL, true, param, null, new HttpGroup.OnEndListener() {
+                @Override
+                public void onEnd(HttpResponse httpresponse) {
+                    MemberOutput memberOuput = (MemberOutput) httpresponse.getResultObject();
+                    if (memberOuput.isSuccess()) {
+                        initLJWPrcoss(memberOuput.getMember());
+                    } else {
+                        PopUtils.showToast(memberOuput.getErrmsg());
+                    }
+
                 }
-
-            }
-        }, new HttpGroup.OnParseListener() {
-            @Override
-            public Entity onParse(String result) {
-                MemberOutput memberOuput = new MemberOutput();
-                memberOuput.setContent(result);
-                return memberOuput;
-            }
-        });
-
+            }, new HttpGroup.OnParseListener() {
+                @Override
+                public Entity onParse(String result) {
+                    MemberOutput memberOuput = new MemberOutput();
+                    memberOuput.setContent(result);
+                    return memberOuput;
+                }
+            });
+        } else if (Constant.FromWhere.FXSERVICE.equals(ljwintent.getStringExtra(Constant.FromWhere.KEY))) {
+            initLJWPrcoss(Constant.member);
+        }
     }
 
     /**
      * 获取数据成功后初始化流程
      */
-    private void initLJWPrcoss(MemberOutput memberOuput) {
+    private void initLJWPrcoss(Member member) {
         isRunning = true;//提交积分线程
-        member = memberOuput.getMember();//获取用户数据
+        this.member = member;//获取用户数据
         intervalTime = Long.valueOf(member.getClientSubmitInterval());//心跳时间
         isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
         localMiaoShaUtil = new MiaoshaUtil();//倒计时

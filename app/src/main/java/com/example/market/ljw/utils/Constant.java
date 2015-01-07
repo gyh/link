@@ -2,6 +2,9 @@ package com.example.market.ljw.utils;
 
 import com.example.market.ljw.bean.output.Member;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by GYH on 2014/10/20.
  */
@@ -40,6 +43,8 @@ public class Constant {
 
     //本地记录用户信息
     public static Member member = null;
+    //记录广告图片
+    public static List<String> imageurls = new ArrayList<String>();
 
     //打开应用的包名
     public static String makeAppName = "";
