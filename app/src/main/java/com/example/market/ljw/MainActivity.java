@@ -27,6 +27,7 @@ import com.example.market.ljw.fragment.AppListFragment;
 import com.example.market.ljw.fragment.CarouselFragment;
 import com.example.market.ljw.fragment.MarketListFragment;
 import com.example.market.ljw.fragment.WebViewFragment;
+import com.example.market.ljw.function.reddotface.view.DragLayout;
 import com.example.market.ljw.function.service.FxService;
 import com.example.market.ljw.service.InputDataUtils;
 import com.example.market.ljw.utils.Constant;
@@ -41,6 +42,7 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
@@ -51,7 +53,8 @@ public class MainActivity extends BaseActivity {
     private TextView tvusername;//用户名显示view
     private TextView tvnumber;//积分显示视图
     private TextView tvtime;//时间显示视图
-    private View ljwview;//背景视图
+    private DragLayout ljwview;//背景视图
+    private View fragmentlayout;
     private View logimg;
     private final long delayMillis = 1000;//定义的一秒
     private long intervalTime = 10; //定义的心跳
@@ -74,7 +77,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ljw);
+        setContentView(R.layout.activity_ljw_new);
         ApplicationManager.clearBackStack();
         //添加广告图片
         CarouselFragment carouselFragment = new CarouselFragment();
@@ -159,6 +162,29 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * 初始化qq样式
+     * */
+    private void initDragLayout() {
+        ljwview = (DragLayout) findViewById(R.id.layoutljw);
+        ljwview.setDragListener(new DragLayout.DragListener() {
+            @Override
+            public void onOpen() {
+//                lv.smoothScrollToPosition(new Random().nextInt(30));
+            }
+
+            @Override
+            public void onClose() {
+//                shake();
+            }
+
+            @Override
+            public void onDrag(float percent) {
+//                ViewHelper.setAlpha(iv_icon, 1 - percent);
+            }
+        });
+    }
+
+    /**
      * 开始计数
      */
     private void startTimeNum() {
@@ -183,13 +209,16 @@ public class MainActivity extends BaseActivity {
      * 初始化视图
      */
     private void initView() {
+        fragmentlayout = findViewById(R.id.fragmentlayout);
         logimg = findViewById(R.id.logimg);
-        ljwview = findViewById(R.id.layoutljw);
+        ljwview = (DragLayout)findViewById(R.id.layoutljw);
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             ljwview.setBackgroundDrawable(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
+            fragmentlayout.setBackgroundDrawable(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
         } else {
             ljwview.setBackground(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
+            fragmentlayout.setBackground(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
         }
         tvusername = (TextView) findViewById(R.id.tvusername);
         tvnumber = (TextView) findViewById(R.id.tvnumber);
@@ -202,6 +231,13 @@ public class MainActivity extends BaseActivity {
                 if (getCurrentMyActivity() instanceof WebViewFragment) {
                     ApplicationManager.back();
                 }
+            }
+        });
+        initDragLayout();
+        tvusername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ljwview.open();
             }
         });
     }
