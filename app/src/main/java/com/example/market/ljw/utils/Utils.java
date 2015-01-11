@@ -139,6 +139,29 @@ public class Utils {
     }
 
     /**
+     * 获取短信跳转的Intent
+     * */
+    public static Intent getIntentForMMS(){
+        Intent intent = null;
+        return intent;
+    }
+
+    /**
+     * 获取连接网appIntent
+     * */
+    public static Intent getLJWAppIntent(Context context){
+        Intent intent = null;
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RecentTaskInfo> appTask = activityManager.getRecentTasks(Integer.MAX_VALUE, 1);
+        for(int i=0;i<appTask.size();i++){
+            if(appTask.get(i).baseIntent.getComponent().getPackageName().equals(Constant.PACKAGENAME)){
+                intent = appTask.get(i).baseIntent;
+            }
+        }
+        return intent;
+    }
+
+    /**
      * 用来判断服务是否运行.
      * @param mContext
      * @param className 判断的服务名字
@@ -206,7 +229,7 @@ public class Utils {
     }
 
     /**
-     *
+     * 获取壁纸
      * */
     public static Bitmap getAndroidSystmeBtmp(Context mContext){
         //获取WallpaperManager 壁纸管理器

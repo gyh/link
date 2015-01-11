@@ -19,13 +19,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.market.ljw.LJWActivity;
 import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.common.frame.AppContext;
 import com.example.market.ljw.function.glowpadview.LockActivity;
 import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.Util;
 import com.example.market.ljw.utils.Utils;
 
 import static java.lang.Thread.sleep;
@@ -50,12 +48,20 @@ public class FxService extends Service {
         public void handleMessage(Message msg) {
             //比较当前应用的包名是否是应用包名或者打开的包名
             if(isShowView){
-                mFloatLayout.setVisibility(View.VISIBLE);//如果不是则显示并且提交显示
-                Constant.theNextLen = Constant.theNextLen-1;
-                tvmsg.setText("积分系统将在（"+Constant.theNextLen+"）秒后关闭，请重新打开积分系统");
-                Utils.showSystem("showpackname",Utils.getFirstTask(FxService.this));
-                if(AppContext.getInstance().getBaseActivity()!=null){
-                    AppContext.getInstance().getBaseActivity().finish();
+                if(Constant.makeAppName.equals(Constant.MMSPACKAGENAME)||Constant.makeAppName.equals(Constant.CONTACTSPACKAGENAME)){
+                    Constant.makeAppName = Constant.PACKAGENAME;
+                    Intent it = new Intent(FxService.this, MainActivity.class);
+                    it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
+                    startActivity(it);
+                }else {
+                    mFloatLayout.setVisibility(View.VISIBLE);//如果不是则显示并且提交显示
+                    Constant.theNextLen = Constant.theNextLen-1;
+                    tvmsg.setText("积分系统将在（"+Constant.theNextLen+"）秒后关闭，请重新打开积分系统");
+                    Utils.showSystem("showpackname",Utils.getFirstTask(FxService.this));
+                    if(AppContext.getInstance().getBaseActivity()!=null){
+                        AppContext.getInstance().getBaseActivity().finish();
+                    }
                 }
             }else {
                 mFloatLayout.setVisibility(View.GONE);

@@ -60,6 +60,8 @@ public class Constant {
 
     public static final String PACKAGENAME = "com.example.market.ljw";
     public static final String PHONEPACKAGENAME = "com.android.phone";
+    public static final String MMSPACKAGENAME="com.android.mms";
+    public static final String CONTACTSPACKAGENAME ="com.android.contacts";
 
     public static final String SCHEME = "package";
     /**

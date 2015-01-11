@@ -88,6 +88,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Constant.theNextLen = 10;//重置倒计时时间
+        Constant.makeAppName = Constant.PACKAGENAME;
     }
 
     @Override

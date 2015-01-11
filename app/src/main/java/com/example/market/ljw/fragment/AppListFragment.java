@@ -45,6 +45,7 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
     private TextView tvTime , tvDate;
     private boolean isshowClock=false, ishowbottom = false; //判断是否点击显示时间
     private long delayMillis = 1000;
+    private Intent mmsIntent = null;
 
     Handler clockhandler = new Handler() {
         @Override
@@ -106,8 +107,14 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
             shareItem.setIcon(pManager.getApplicationIcon(pinfo));
             // 设置应用程序名字
             shareItem.setLabel(pManager.getApplicationLabel(pinfo).toString());
+            Utils.showSystem("pManager","Label"+shareItem.getLabel());
             // 设置应用程序的包名
             shareItem.setPackageName(pinfo.packageName);
+            Utils.showSystem("pManager","PackageName"+shareItem.getPackageName());
+            //获取信息跳转的intent
+            if(shareItem.getPackageName().equals(Constant.MMSPACKAGENAME)){
+                mmsIntent = intent;
+            }
             appsItemInfos.add(shareItem);
             intentList.add(intent);
         }
@@ -155,10 +162,17 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.layoutmsg:
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setType("vnd.android-dir/mms-sms");
-                startActivity(intent);
-                Constant.makeAppName = "com.android.mms";
+                if(mmsIntent==null){
+                    Intent intent = new Intent();
+                    intent.setClassName("com.android.mms","com.android.mms.ui.ConversationList");
+                    getActivity().startActivity(intent);
+                    Constant.makeAppName = "com.android.mms";
+                    Utils.showSystem("pManager","PackageName 信息 null");
+                }else {
+                    getActivity().startActivity(mmsIntent);
+                    Constant.makeAppName = "com.android.mms";
+                    Utils.showSystem("pManager","PackageName 信息 nonull");
+                }
                 break;
             case R.id.layoutpeople:
                 Intent intent001 = new Intent();
