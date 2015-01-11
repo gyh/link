@@ -6,4 +6,5 @@
     <color name="theme">#990033</color>
     <color name="line">#CCCCCC</color>
     <color name="windowsbg">#EEEEEE</color>
+    <color name="fount_bg">#0f000000</color>
 </resources>

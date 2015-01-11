@@ -11,9 +11,13 @@ import android.os.*;
 import android.os.Process;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.market.ljw.bean.AppsItemInfo;
 import com.example.market.ljw.bean.Entity;
 import com.example.market.ljw.bean.output.Member;
 import com.example.market.ljw.bean.output.MemberOutput;
@@ -40,7 +44,9 @@ import com.example.market.ljw.utils.Utils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -53,15 +59,18 @@ public class MainActivity extends BaseActivity {
     private TextView tvusername;//用户名显示view
     private TextView tvnumber;//积分显示视图
     private TextView tvtime;//时间显示视图
+    private TextView tvAppVersion;
     private DragLayout ljwview;//背景视图
     private View fragmentlayout;
     private View logimg;
+    private ListView listview;
     private final long delayMillis = 1000;//定义的一秒
     private long intervalTime = 10; //定义的心跳
     private boolean isRunning = false;//定义是否开启线程
     private Intent intentfxService;//悬浮窗口配置
     private long mRequetTimeInFuture = 0;//记录上一次提交时间
     private boolean isCanAddscore = true;
+    private List<String> urlList = new ArrayList<String>();;
     //倒计时工具类
     private MiaoshaUtil localMiaoShaUtil;
     Handler refhandler = new Handler() {//积分获取后改变的ui线程
@@ -105,14 +114,14 @@ public class MainActivity extends BaseActivity {
         isRunning = false;//结束积分线程
         if (localMiaoShaUtil != null)
             localMiaoShaUtil.countdownCancel();
-        Utils.showSystem("onDestroy",isRunning+"");
+        Utils.showSystem("onDestroy", isRunning + "");
     }
 
     /**
      * 获取用户信息
      */
     private void getMemberInfo() {
-        Utils.showSystem("getMemberInfo","-----重新开始初始化");
+        Utils.showSystem("getMemberInfo", "-----重新开始初始化");
         Intent ljwintent = getIntent();
         if (Constant.FromWhere.LOGINACTIVITY.equals(ljwintent.getStringExtra(Constant.FromWhere.KEY))) {
             member = (Member) getIntent().getSerializableExtra(Constant.ExtraKey.MEMBER);
@@ -209,6 +218,31 @@ public class MainActivity extends BaseActivity {
      * 初始化视图
      */
     private void initView() {
+        //版本号
+        tvAppVersion = (TextView)findViewById(R.id.tv_app_version);
+        //设置当前版本号
+        try {
+            tvAppVersion.setText("版本号："+Utils.getVersionName(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //初始化点击菜单列表
+        urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberShop/Default.aspx" +
+                "&token="+getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
+        urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberCenterHome.aspx" +
+                "&token="+getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
+        //菜单列表
+        listview = (ListView)findViewById(R.id.listview);
+        listview.setAdapter(new ArrayAdapter<String>(MainActivity.this,
+                R.layout.layout_ljw_listviewitem, new String[] { "我的商城", "会员中心"}));
+        //菜单列表点击事件跳转到商场
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ljwview.close();
+                showWebView(0, urlList.get(i));
+            }
+        });
         fragmentlayout = findViewById(R.id.fragmentlayout);
         logimg = findViewById(R.id.logimg);
         ljwview = (DragLayout)findViewById(R.id.layoutljw);
