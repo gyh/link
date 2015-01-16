@@ -39,7 +39,7 @@ public class Constant {
     public static final String SharedPreferencesKey = "LJW";
 
     //最后等待时间
-    public static int theNextLen = 10;
+    public static int theNextLen = 600;
 
     //本地记录用户信息
     public static Member member = null;
