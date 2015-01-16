@@ -3,6 +3,7 @@ package com.example.market.ljw.function.reddotface.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.Rect;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -39,6 +40,8 @@ public class DragLayout extends FrameLayout {
     private MyFrameLayout vg_main;
     private Status status = Status.Close;
 
+    private View mIgnoredViews;
+
     public DragLayout(Context context) {
         this(context, null);
     }
@@ -52,6 +55,21 @@ public class DragLayout extends FrameLayout {
         super(context, attrs, defStyle);
         gestureDetector = new GestureDetectorCompat(context, new YScrollDetector());
         dragHelper = ViewDragHelper.create(this, dragHelperCallback);
+    }
+
+    public DragLayout(Context context, AttributeSet attrs, int defStyle,View mIgnoredViews) {
+        super(context, attrs, defStyle);
+        gestureDetector = new GestureDetectorCompat(context, new YScrollDetector());
+        dragHelper = ViewDragHelper.create(this, dragHelperCallback);
+        this.mIgnoredViews = mIgnoredViews;
+    }
+
+    public View getmIgnoredViews() {
+        return mIgnoredViews;
+    }
+
+    public void setmIgnoredViews(View mIgnoredViews) {
+        this.mIgnoredViews = mIgnoredViews;
     }
 
     class YScrollDetector extends SimpleOnGestureListener {
@@ -178,7 +196,16 @@ public class DragLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return dragHelper.shouldInterceptTouchEvent(ev) && gestureDetector.onTouchEvent(ev);
+        if(mIgnoredViews != null){
+            if(mIgnoredViews == dragHelper.findTopChildUnder((int)(ev.getX()),(int)(ev.getY()))){
+                return false;
+            }else {
+                return dragHelper.shouldInterceptTouchEvent(ev) && gestureDetector.onTouchEvent(ev);
+            }
+        }else {
+            return dragHelper.shouldInterceptTouchEvent(ev) && gestureDetector.onTouchEvent(ev);
+        }
+
     }
 
     @Override

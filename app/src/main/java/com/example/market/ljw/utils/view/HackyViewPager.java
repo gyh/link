@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.example.market.ljw.utils.Utils;
+
 public class HackyViewPager extends ViewPager {
 
     private boolean isTouched;
@@ -26,12 +28,16 @@ public class HackyViewPager extends ViewPager {
             isTouched = true;
         else if(ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL)
             isTouched = false;
+        Utils.showSystem("onTouchEvent","x = "+ev.getX());
+        getParent().requestDisallowInterceptTouchEvent(false);
         return super.onTouchEvent(ev);
     }
 
     public boolean isTouched() {
         return isTouched;
     }
+
+
 
     @Override
     public PagerAdapter getAdapter() {

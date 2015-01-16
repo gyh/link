@@ -246,6 +246,7 @@ public class MainActivity extends BaseActivity {
         fragmentlayout = findViewById(R.id.fragmentlayout);
         logimg = findViewById(R.id.logimg);
         ljwview = (DragLayout)findViewById(R.id.layoutljw);
+        ljwview.setmIgnoredViews(findViewById(R.id.carouselfragment));
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             ljwview.setBackgroundDrawable(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
