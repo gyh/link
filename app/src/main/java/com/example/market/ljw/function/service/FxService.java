@@ -47,6 +47,15 @@ public class FxService extends Service {
         @Override
         public void handleMessage(Message msg) {
             //比较当前应用的包名是否是应用包名或者打开的包名
+            if(msg.what == 4){
+                Constant.makeAppName = Constant.PACKAGENAME;
+                Intent it = new Intent(FxService.this, MainActivity.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
+                startActivity(it);
+            }else {
+                Constant.theNextLen = Constant.theNextLen-1;
+            }
             if(isShowView){
                 if(Constant.makeAppName.equals(Constant.MMSPACKAGENAME)||Constant.makeAppName.equals(Constant.CONTACTSPACKAGENAME)){
                     Constant.makeAppName = Constant.PACKAGENAME;
@@ -55,13 +64,13 @@ public class FxService extends Service {
                     it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
                     startActivity(it);
                 }else {
-                    mFloatLayout.setVisibility(View.VISIBLE);//如果不是则显示并且提交显示
+//                    mFloatLayout.setVisibility(View.VISIBLE);//如果不是则显示并且提交显示
                     Constant.theNextLen = Constant.theNextLen-1;
-                    tvmsg.setText("积分系统将在（"+Constant.theNextLen+"）秒后关闭，请重新打开积分系统");
-                    Utils.showSystem("showpackname",Utils.getFirstTask(FxService.this));
-                    if(AppContext.getInstance().getBaseActivity()!=null){
-                        AppContext.getInstance().getBaseActivity().finish();
-                    }
+//                    tvmsg.setText("积分系统将在（"+Constant.theNextLen+"）秒后关闭，请重新打开积分系统");
+//                    Utils.showSystem("showpackname",Utils.getFirstTask(FxService.this));
+//                    if(AppContext.getInstance().getBaseActivity()!=null){
+//                        AppContext.getInstance().getBaseActivity().finish();
+//                    }
                 }
             }else {
                 mFloatLayout.setVisibility(View.GONE);
@@ -139,11 +148,20 @@ public class FxService extends Service {
                         //获取当前应用的包名
                         isShowView = Utils.isAppOnForeground(FxService.this);
                         //判断等待时间是否结束
-                        if(Constant.theNextLen<=0){//如果结束则结束整个应用
-                            isrunning = false;
-                            FxService.this.stopSelf();
+                        if(isShowView){
+                            if(Constant.makeAppName.equals(Constant.MMSPACKAGENAME)||
+                                    Constant.makeAppName.equals(Constant.CONTACTSPACKAGENAME)){
+                                clockhandler.sendEmptyMessage(4);
+                            }else {
+                                if(Constant.theNextLen<=0){//如果结束则结束整个应用
+                                    clockhandler.sendEmptyMessage(4);
+                                }else {
+                                    clockhandler.sendEmptyMessage(5);
+                                }
+
+                            }
+
                         }
-                        clockhandler.sendEmptyMessage(4);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
