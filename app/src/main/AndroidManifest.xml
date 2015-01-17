@@ -96,6 +96,7 @@
         <!--</service>-->
         <service android:name=".function.service.TimeService"/>
         <service android:name=".function.service.FxService"/>
+        <service android:name=".function.service.LjwService"/>
         <receiver android:name="com.example.market.ljw.receiver.DownloadCompleteReceiver">
             <intent-filter>
                 <action android:name="com.qlf.broadCastFlag">

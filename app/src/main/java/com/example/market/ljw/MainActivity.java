@@ -28,6 +28,7 @@ import com.example.market.ljw.fragment.CarouselFragment;
 import com.example.market.ljw.fragment.MarketListFragment;
 import com.example.market.ljw.fragment.WebViewFragment;
 import com.example.market.ljw.function.service.FxService;
+import com.example.market.ljw.function.service.LjwService;
 import com.example.market.ljw.service.InputDataUtils;
 import com.example.market.ljw.utils.Constant;
 import com.example.market.ljw.utils.DateUtils;
@@ -87,7 +88,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Constant.theNextLen = 10;//重置倒计时时间
+        Constant.theNextLen = Constant.theWaitTime;//重置倒计时时间
         Constant.makeAppName = Constant.PACKAGENAME;
     }
 
@@ -295,8 +296,8 @@ public class MainActivity extends BaseActivity {
      * 初始化服务
      */
     private void initService() {
-        intentfxService = new Intent(MainActivity.this, FxService.class);
-        if (!Utils.isServiceRunning(this, FxService.class.getName())) {
+        intentfxService = new Intent(MainActivity.this, LjwService.class);
+        if (!Utils.isServiceRunning(this, LjwService.class.getName())) {
             startService(intentfxService);//开启浮动窗口服务
         }
     }

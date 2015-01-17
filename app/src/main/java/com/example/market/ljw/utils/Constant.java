@@ -40,6 +40,7 @@ public class Constant {
 
     //最后等待时间
     public static int theNextLen = 600;
+    public static final int theWaitTime = 600;
 
     //本地记录用户信息
     public static Member member = null;
