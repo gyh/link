@@ -58,7 +58,6 @@ public class LjwService extends Service implements View.OnClickListener {
                 it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
                 startActivity(it);
-                mFloatLayout.setVisibility(View.GONE);
             } else if (msg.what == 6) {
                 mFloatLayout.setVisibility(View.GONE);
             } else if (msg.what == 5) {
@@ -140,15 +139,12 @@ public class LjwService extends Service implements View.OnClickListener {
         floatview.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
                 //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                 wmParams.x = (int) event.getRawX() - floatview.getMeasuredWidth() / 2;
-                //Log.i(TAG, "Width/2--->" + mFloatView.getMeasuredWidth()/2);
                 Utils.showSystem("service", "RawX" + event.getRawX());
                 Utils.showSystem("service", "RawX" + event.getX());
                 //25为状态栏的高度
                 wmParams.y = (int) event.getRawY() - floatview.getMeasuredHeight() / 2 - 25;
-                // Log.i(TAG, "Width/2--->" + mFloatView.getMeasuredHeight()/2);
                 Utils.showSystem("service", "RawY" + event.getRawY());
                 Utils.showSystem("service", "Y" + event.getY());
                 //刷新
@@ -167,7 +163,7 @@ public class LjwService extends Service implements View.OnClickListener {
             public void run() {
                 while (isrunning) {
                     try {
-                        sleep(5000);
+                        sleep(1000);
                         //获取当前应用的包名
                         isShowView = Utils.isAppOnForeground(LjwService.this);
                         //判断等待时间是否结束

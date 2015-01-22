@@ -8,5 +8,5 @@
        android:id="@+id/ljw_float_img"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:src="@drawable/ic_launcher"/>
+       android:src="@drawable/action_fx"/>
 </LinearLayout>
