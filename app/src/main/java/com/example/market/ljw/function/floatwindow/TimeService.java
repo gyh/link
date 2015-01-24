@@ -1,4 +1,4 @@
-package com.example.market.ljw.function.service;
+package com.example.market.ljw.function.floatwindow;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -14,6 +14,7 @@ import android.os.Message;
 /**
  * Created by GYH on 2014/11/30.
  */
+@Deprecated
 public class TimeService extends Service implements Runnable {
     protected static final String ACTIONServiceTOActivity = "Service-Activity";//TimeService把时间变化告诉Mychronometer的广播
     protected static final String ACTIONActivityToService = "Activity-Service";//Mychronometer告知TimeService停止、开始、清零的广播

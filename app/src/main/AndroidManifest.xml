@@ -94,9 +94,9 @@
                 <!--<action android:name="android.intent.action.SCREEN_OFF" />-->
             <!--</intent-filter>-->
         <!--</service>-->
-        <service android:name=".function.service.TimeService"/>
-        <service android:name=".function.service.FxService"/>
-        <service android:name=".function.service.LjwService"/>
+        <service android:name=".function.floatwindow.TimeService"/>
+        <service android:name=".function.floatwindow.FxService"/>
+        <service android:name=".function.floatwindow.LjwService"/>
         <receiver android:name="com.example.market.ljw.receiver.DownloadCompleteReceiver">
             <intent-filter>
                 <action android:name="com.qlf.broadCastFlag">

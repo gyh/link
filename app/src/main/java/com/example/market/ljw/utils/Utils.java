@@ -23,6 +23,7 @@ import com.example.market.ljw.bean.AppsItemInfo;
 import com.example.market.ljw.common.frame.AppContext;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -415,6 +416,9 @@ public class Utils {
         }
     }
 
+    /**
+     * 获取当前版本号
+     * */
     public static String getVersionName(Context context) throws Exception{
         // 获取packagemanager的实例
         PackageManager packageManager = context.getPackageManager();
@@ -422,5 +426,23 @@ public class Utils {
         PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(),0);
         String version = packInfo.versionName;
         return version;
+    }
+    /**
+     * 用于获取状态栏的高度。
+     *
+     * @return 返回状态栏高度的像素值。
+     */
+    public static int getStatusBarHeight(Context context) {
+        int statusBarHeight =0 ;
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object o = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = (Integer) field.get(o);
+            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return statusBarHeight;
     }
 }
