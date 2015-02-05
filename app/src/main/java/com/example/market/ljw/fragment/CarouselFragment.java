@@ -45,7 +45,7 @@ public class CarouselFragment extends MyActivity {
     //适配器
     private ImageAdapter imageAdapter;
     //自动轮询间隔
-    private int carouselTime = 2000;
+    private int carouselTime = 60000;
     private View fragmentview;
 
     //轮询通知操作

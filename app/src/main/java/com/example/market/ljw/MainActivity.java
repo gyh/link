@@ -1,6 +1,9 @@
 package com.example.market.ljw;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.*;
 import android.os.Process;
@@ -21,6 +24,7 @@ import com.example.market.ljw.fragment.CarouselFragment;
 import com.example.market.ljw.fragment.MarketListFragment;
 import com.example.market.ljw.fragment.WebViewFragment;
 import com.example.market.ljw.function.floatwindow.LjwService;
+import com.example.market.ljw.function.floatwindow.ServiceInterface;
 import com.example.market.ljw.service.InputDataUtils;
 import com.example.market.ljw.utils.Constant;
 import com.example.market.ljw.utils.DateUtils;
@@ -93,6 +97,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         isRunning = false;//结束积分线程
+        mService.hidden();
         if (localMiaoShaUtil != null)
             localMiaoShaUtil.countdownCancel();
         Utils.showSystem("onDestroy",isRunning+"");
@@ -290,9 +295,32 @@ public class MainActivity extends BaseActivity {
     private void initService() {
         intentfxService = new Intent(MainActivity.this, LjwService.class);
         if (!Utils.isServiceRunning(this, LjwService.class.getName())) {
-            startService(intentfxService);//开启浮动窗口服务
+            bindService(intentfxService, sconnection, Context.BIND_AUTO_CREATE);
         }
     }
+
+    private LjwService serviceBinder;
+    /* 注册接口方法*/
+    ServiceInterface mService = null;
+    /* 绑定service监听*/
+    ServiceConnection sconnection = new ServiceConnection() {
+        /*当绑定时执行*/
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = (ServiceInterface) service;
+            if (mService != null) {
+                mService.show();//测试方法
+            }
+            Intent intent = new Intent();//这里只是为了下面传intent对象而构建的，没有实际意义
+			/*绑定后就可以使用Service的相关方法和属性来开始你对Service的操作*/
+            serviceBinder = ((LjwService.MyBinder) service).getService();
+			/*比如：你可以掉用Service的onStartCommand()方法*/
+            serviceBinder.onStartCommand(intent, 0, 0);//0,0是我随意的参数
+        }
+        /*当断开绑定时执行，但调用unbindService()时不会触发改方法*/
+        public void onServiceDisconnected(ComponentName name) {
+            mService.hidden();
+        }
+    };
 
     /**
      * 初始化商城列表
