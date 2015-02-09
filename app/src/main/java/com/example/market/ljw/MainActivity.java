@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
     private final long delayMillis = 1000;//定义的一秒
     private long intervalTime = 10; //定义的心跳
     private boolean isRunning = false;//定义是否开启线程
-    private Intent intentfxService;//悬浮窗口配置
+    private Intent intentfxService = null;//悬浮窗口配置
     private long mRequetTimeInFuture = 0;//记录上一次提交时间
     private boolean isCanAddscore = true;
     //倒计时工具类
@@ -73,6 +73,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ljw);
         ApplicationManager.clearBackStack();
+        initView();
         //添加广告图片
         CarouselFragment carouselFragment = new CarouselFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
@@ -148,7 +149,7 @@ public class MainActivity extends BaseActivity {
         intervalTime = Long.valueOf(member.getClientSubmitInterval());//心跳时间
         isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
         localMiaoShaUtil = new MiaoshaUtil();//倒计时
-        initView();
+        initViewData();
         if (isCanAddscore) {
             startTimeNum();
         }
@@ -192,6 +193,12 @@ public class MainActivity extends BaseActivity {
         tvusername = (TextView) findViewById(R.id.tvusername);
         tvnumber = (TextView) findViewById(R.id.tvnumber);
         tvtime = (TextView) findViewById(R.id.tvtime);
+    }
+
+    /**
+     * 初始化视图数据
+     * */
+    private void initViewData(){
         tvusername.setText("账号：" + member.getLoginName());
         tvnumber.setText("积分：" + member.getTodayScore());
         logimg.setOnClickListener(new View.OnClickListener() {
@@ -356,7 +363,9 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(View view) {
                                 dialogBuilder.dismiss();
-                                stopService(intentfxService);//去除悬浮窗口
+                                if(intentfxService != null){
+                                    stopService(intentfxService);//去除悬浮窗口
+                                }
                                 finish();
                             }
                         });
