@@ -1,11 +1,9 @@
-package com.example.market.ljw.function.reddotface.view;
+package com.example.market.ljw.core.utils.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 public class MyFrameLayout extends FrameLayout {
     private DragLayout dl;

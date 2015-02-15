@@ -1,9 +1,8 @@
-package com.example.market.ljw.function.reddotface.view;
+package com.example.market.ljw.core.utils.view;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.Rect;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -16,12 +15,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.market.ljw.R;
+import com.example.market.ljw.core.R;
 import com.nineoldandroids.view.ViewHelper;
 
 /***
  *
- * 仿qq侧滑
+ * 类似QQ侧滑
+ * 通过添加
  * */
 public class DragLayout extends FrameLayout {
 

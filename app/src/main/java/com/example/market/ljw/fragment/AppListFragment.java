@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.market.ljw.MainActivity;
+import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.utils.AppsItemInfo;
 import com.example.market.ljw.core.common.frame.MyActivity;

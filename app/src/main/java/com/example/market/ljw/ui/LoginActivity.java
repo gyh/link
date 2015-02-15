@@ -8,7 +8,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.core.common.frame.BaseActivity;

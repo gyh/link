@@ -1,4 +1,4 @@
-package com.example.market.ljw;
+package com.example.market.ljw.ui;
 
 
 import android.content.ComponentName;
@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.BaseActivity;
 import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
 import com.example.market.ljw.core.common.frame.taskstack.BackStackManager;
@@ -26,6 +28,7 @@ import com.example.market.ljw.core.utils.MyCountdownTimer;
 import com.example.market.ljw.core.utils.PopUtils;
 import com.example.market.ljw.core.utils.PromptUtil;
 import com.example.market.ljw.core.utils.Utils;
+import com.example.market.ljw.core.utils.view.DragLayout;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.Member;
 import com.example.market.ljw.entity.bean.output.MemberOutput;
@@ -33,7 +36,6 @@ import com.example.market.ljw.fragment.AppListFragment;
 import com.example.market.ljw.fragment.CarouselFragment;
 import com.example.market.ljw.fragment.MarketListFragment;
 import com.example.market.ljw.fragment.WebViewFragment;
-import com.example.market.ljw.function.reddotface.view.DragLayout;
 import com.example.market.ljw.function.floatwindow.LjwService;
 import com.example.market.ljw.function.floatwindow.ServiceInterface;
 import com.example.market.ljw.service.InputDataUtils;

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.market.ljw.MainActivity;
+import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.AdvertisementOutput;

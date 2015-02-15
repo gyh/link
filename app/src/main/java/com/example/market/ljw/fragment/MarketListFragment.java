@@ -1,6 +1,5 @@
 package com.example.market.ljw.fragment;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +8,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
-import com.example.market.ljw.MainActivity;
+import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
 
 import com.example.market.ljw.core.common.frame.AppContext;
 import com.example.market.ljw.core.common.frame.MyActivity;
-import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
 import com.example.market.ljw.core.common.frame.taskstack.NeedShowAgainModule;
 import com.example.market.ljw.core.utils.AppsItemInfo;
 import com.example.market.ljw.service.ApplistAdapter;
