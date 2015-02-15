@@ -3,13 +3,13 @@ apply plugin: 'android'
 android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
-
+    enforceUniquePackageName=false
     defaultConfig {
         applicationId "com.example.market.ljw"
         minSdkVersion 8
         targetSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        versionCode 12
+        versionName "1.2"
     }
     signingConfigs {
 
@@ -30,11 +30,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':library:NiftyDialogEffects')
-    compile 'com.android.support:support-v4:19.1.0'
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile "com.github.kevinsawicki:http-request:5.6"
-    compile "org.json:json:20140107"
-    compile 'com.novoda:sqliteprovider-core:1.0.3'
-    compile 'org.roboguice:roboguice:2.0'
+    compile project(':library:function:core')
 }

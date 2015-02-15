@@ -8,8 +8,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.widget.Toast;
 
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.Utils;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.Utils;
 
 import java.io.File;
 

@@ -8,9 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.MyActivity;
-import com.example.market.ljw.common.frame.taskstack.ApplicationManager;
-import com.example.market.ljw.common.frame.taskstack.NeedShowAgainModule;
+import com.example.market.ljw.core.common.frame.MyActivity;
+import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
+import com.example.market.ljw.core.common.frame.taskstack.NeedShowAgainModule;
 
 /**
  * Created by GYH on 2014/12/6.

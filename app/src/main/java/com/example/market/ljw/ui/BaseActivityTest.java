@@ -3,8 +3,8 @@ package com.example.market.ljw.ui;
 import android.os.Bundle;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.BaseActivity;
-import com.example.market.ljw.common.frame.taskstack.ApplicationManager;
+import com.example.market.ljw.core.common.frame.BaseActivity;
+import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
 import com.example.market.ljw.fragment.FragmenTest;
 
 /**

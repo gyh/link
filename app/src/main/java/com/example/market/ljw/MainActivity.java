@@ -1,11 +1,6 @@
 package com.example.market.ljw;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.*;
 import android.os.Process;
@@ -15,18 +10,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.market.ljw.bean.AppsItemInfo;
-import com.example.market.ljw.bean.Entity;
-import com.example.market.ljw.bean.output.Member;
-import com.example.market.ljw.bean.output.MemberOutput;
-import com.example.market.ljw.common.frame.AppContext;
-import com.example.market.ljw.common.frame.BaseActivity;
-import com.example.market.ljw.common.frame.taskstack.ApplicationManager;
-import com.example.market.ljw.common.frame.taskstack.BackStackManager;
-import com.example.market.ljw.common.http.HttpGroup;
-import com.example.market.ljw.common.http.HttpResponse;
+import com.example.market.ljw.core.common.frame.BaseActivity;
+import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
+import com.example.market.ljw.core.common.frame.taskstack.BackStackManager;
+import com.example.market.ljw.core.common.http.HttpGroup;
+import com.example.market.ljw.core.common.http.HttpResponse;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.DateUtils;
+import com.example.market.ljw.core.utils.MiaoshaUtil;
+import com.example.market.ljw.core.utils.MyCountdownTimer;
+import com.example.market.ljw.core.utils.PopUtils;
+import com.example.market.ljw.core.utils.PromptUtil;
+import com.example.market.ljw.core.utils.Utils;
+import com.example.market.ljw.entity.bean.Entity;
+import com.example.market.ljw.entity.bean.output.Member;
+import com.example.market.ljw.entity.bean.output.MemberOutput;
+
 import com.example.market.ljw.fragment.AppListFragment;
 import com.example.market.ljw.fragment.CarouselFragment;
 import com.example.market.ljw.fragment.MarketListFragment;
@@ -34,13 +34,6 @@ import com.example.market.ljw.fragment.WebViewFragment;
 import com.example.market.ljw.function.reddotface.view.DragLayout;
 import com.example.market.ljw.function.service.FxService;
 import com.example.market.ljw.service.InputDataUtils;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.DateUtils;
-import com.example.market.ljw.utils.MiaoshaUtil;
-import com.example.market.ljw.utils.MyCountdownTimer;
-import com.example.market.ljw.utils.PopUtils;
-import com.example.market.ljw.utils.PromptUtil;
-import com.example.market.ljw.utils.Utils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
@@ -48,7 +41,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
@@ -175,6 +167,7 @@ public class MainActivity extends BaseActivity {
      * */
     private void initDragLayout() {
         ljwview = (DragLayout) findViewById(R.id.layoutljw);
+        ljwview.setmIgnoredViews(findViewById(R.id.carousel_viewpage));
         ljwview.setDragListener(new DragLayout.DragListener() {
             @Override
             public void onOpen() {

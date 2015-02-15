@@ -7,11 +7,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.BaseActivity;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.DPIUtil;
-import com.example.market.ljw.utils.Util;
-import com.example.market.ljw.utils.Utils;
+import com.example.market.ljw.core.common.frame.BaseActivity;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.DPIUtil;
+import com.example.market.ljw.core.utils.Util;
+import com.example.market.ljw.core.utils.Utils;
 
 /**
  * Created by GYH on 2014/10/22.

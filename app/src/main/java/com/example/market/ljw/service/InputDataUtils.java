@@ -1,8 +1,8 @@
 package com.example.market.ljw.service;
 
-import com.example.market.ljw.bean.input.LoginUser;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.Log;
+import com.example.market.ljw.entity.bean.input.LoginUser;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.Log;
 
 /**
  * Created by GYH on 2014/10/27.

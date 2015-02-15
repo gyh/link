@@ -2,8 +2,8 @@ package com.example.market.ljw.service;
 
 import android.os.Handler;
 
-import com.example.market.ljw.bean.output.Member;
-import com.example.market.ljw.common.frame.BaseActivity;
+import com.example.market.ljw.entity.bean.output.Member;
+import com.example.market.ljw.core.common.frame.BaseActivity;
 
 /**
  * Created by GYH on 2014/10/27.

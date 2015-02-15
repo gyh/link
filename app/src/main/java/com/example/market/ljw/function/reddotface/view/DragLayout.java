@@ -26,7 +26,7 @@ import com.nineoldandroids.view.ViewHelper;
 public class DragLayout extends FrameLayout {
 
     private boolean isShowShadow = true;
-
+    private boolean isTouched;
     private GestureDetectorCompat gestureDetector;
     private ViewDragHelper dragHelper;
     private DragListener dragListener;

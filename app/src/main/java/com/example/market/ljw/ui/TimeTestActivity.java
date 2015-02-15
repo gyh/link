@@ -1,10 +1,10 @@
 package com.example.market.ljw.ui;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.BaseActivity;
+import com.example.market.ljw.core.common.frame.BaseActivity;
 import com.example.market.ljw.function.service.FxService;
 import com.example.market.ljw.function.service.TimeService;
-import com.example.market.ljw.utils.Utils;
+import com.example.market.ljw.core.utils.Utils;
 
 import android.app.Activity;
 import android.app.AlarmManager;

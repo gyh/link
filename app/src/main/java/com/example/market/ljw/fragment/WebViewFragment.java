@@ -15,10 +15,10 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.MyActivity;
-import com.example.market.ljw.common.frame.taskstack.NeedShowAgainModule;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.PromptUtil;
+import com.example.market.ljw.core.common.frame.MyActivity;
+import com.example.market.ljw.core.common.frame.taskstack.NeedShowAgainModule;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.PromptUtil;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 

@@ -2,17 +2,12 @@ package com.example.market.ljw.ui;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.BaseActivity;
-import com.example.market.ljw.common.frame.taskstack.ApplicationManager;
-import com.example.market.ljw.common.frame.taskstack.BackStackManager;
+import com.example.market.ljw.core.common.frame.BaseActivity;
+import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
 import com.example.market.ljw.fragment.WebViewFragment;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.PromptUtil;
-import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
-import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
+import com.example.market.ljw.core.utils.Constant;
 
 /**
  * Created by GYH on 2014/11/14.

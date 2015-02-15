@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile "com.github.kevinsawicki:http-request:5.6"
+    compile "org.json:json:20140107"
+}

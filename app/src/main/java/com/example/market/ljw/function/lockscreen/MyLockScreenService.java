@@ -8,7 +8,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 
 import com.example.market.ljw.function.glowpadview.LockActivity;
-import com.example.market.ljw.utils.Log;
+import com.example.market.ljw.core.utils.Log;
 
 /**
  * Created by GYH on 2014/10/17.

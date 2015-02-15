@@ -11,9 +11,39 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
 allprojects {
+
+
     repositories {
+        mavenCentral()
+        mavenLocal()
         jcenter()
+    }
+
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    ext {
+        compileSdkVersion = 21
+        buildToolsVersion = "21.1.0"
+        minSdkVersion = 11
+        targetSdkVersion = 21
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+    }
+
+    tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn(nativeLibsToJar)
+    }
+
+
+    task nativeLibsToJar(type: Zip, description: 'create a jar archive of the native libs') {
+        destinationDir file("$buildDir/native-libs")
+        baseName 'native-libs'
+        extension 'jar'
+        from fileTree(dir: 'libs', include: '**/*.so')
+        into 'lib/'
     }
 }
