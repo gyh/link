@@ -15,7 +15,7 @@ import android.view.View;
 import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.AppContext;
-import com.example.market.ljw.function.glowpadview.LockActivity;
+import com.example.market.ljw.glowpadview.LockActivity;
 import com.example.market.ljw.core.utils.Constant;
 import com.example.market.ljw.core.utils.Utils;
 

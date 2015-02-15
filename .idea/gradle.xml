@@ -15,6 +15,8 @@
             <option value="$PROJECT_DIR$/library/Function/core" />
             <option value="$PROJECT_DIR$/library/Function/db" />
             <option value="$PROJECT_DIR$/library/Function/entity" />
+            <option value="$PROJECT_DIR$/library/service" />
+            <option value="$PROJECT_DIR$/library/service/lock" />
           </set>
         </option>
       </GradleProjectSettings>

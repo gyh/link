@@ -92,8 +92,8 @@
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="aopalliance-1.0" level="project" />
-    <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="module" module-name="entity" exported="" />
+    <orderEntry type="module" module-name="lock" exported="" />
   </component>
 </module>
 

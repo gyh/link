@@ -1,1 +1,1 @@
-include ':app', ':library:function:NiftyDialogEffects', ':library:function:core','library:function:entity','library:function:db'
+include ':app','library:service:lock',':library:function:NiftyDialogEffects', ':library:function:core','library:function:entity','library:function:db'
