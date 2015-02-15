@@ -6,7 +6,8 @@
     android:gravity="center_vertical"
     android:minHeight="48dp"
     android:paddingLeft="@dimen/padding_middle"
-    android:paddingRight="@dimen/padding_middle">
+    android:paddingRight="@dimen/padding_middle"
+    android:id="@+id/layoutljwtopview">
     <ImageView
         android:id="@+id/logimg"
         android:layout_width="36dp"

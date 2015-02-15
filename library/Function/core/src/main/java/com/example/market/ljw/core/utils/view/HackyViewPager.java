@@ -29,9 +29,7 @@ public class HackyViewPager extends ViewPager {
             isTouched = true;
         else if(ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL)
             isTouched = false;
-        Utils.showSystem("onTouchEvent", "x = " + ev.getX());
-        getParent().requestDisallowInterceptTouchEvent(false);
-        return isTouched;
+        return super.onTouchEvent(ev);
     }
 
     public boolean isTouched() {

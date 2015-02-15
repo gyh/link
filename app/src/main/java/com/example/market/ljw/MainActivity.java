@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ljw_new);
+        setContentView(R.layout.activity_ljw);
         ApplicationManager.clearBackStack();
         initView();
         //添加广告图片
@@ -170,23 +170,25 @@ public class MainActivity extends BaseActivity {
     /**
      * 初始化qq样式
      * */
-    private void initDragLayout() {
-        ljwview = (DragLayout) findViewById(R.id.layoutljw);
-        ljwview.setmIgnoredViews(findViewById(R.id.carousel_viewpage));
+    public void initDragLayout() {
+        ljwview.setmIgnoredViews(findViewById(R.id.carouselfragment));
         ljwview.setDragListener(new DragLayout.DragListener() {
             @Override
             public void onOpen() {
-//                lv.smoothScrollToPosition(new Random().nextInt(30));
             }
 
             @Override
             public void onClose() {
-//                shake();
             }
 
             @Override
             public void onDrag(float percent) {
-//                ViewHelper.setAlpha(iv_icon, 1 - percent);
+            }
+        });
+        tvusername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ljwview.open();
             }
         });
     }
@@ -244,7 +246,6 @@ public class MainActivity extends BaseActivity {
         fragmentlayout = findViewById(R.id.fragmentlayout);
         logimg = findViewById(R.id.logimg);
         ljwview = (DragLayout)findViewById(R.id.layoutljw);
-        ljwview.setmIgnoredViews(findViewById(R.id.carouselfragment));
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             ljwview.setBackgroundDrawable(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
@@ -272,13 +273,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-        initDragLayout();
-        tvusername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ljwview.open();
-            }
-        });
+
     }
 
     /**

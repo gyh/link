@@ -197,7 +197,7 @@ public class DragLayout extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if(mIgnoredViews != null){
-            if(mIgnoredViews == dragHelper.findTopChildUnder((int)(ev.getX()),(int)(ev.getY()))){
+            if (isInThisView((int)ev.getX(),(int)ev.getY(),mIgnoredViews)) {
                 return false;
             }else {
                 return dragHelper.shouldInterceptTouchEvent(ev) && gestureDetector.onTouchEvent(ev);
@@ -314,6 +314,27 @@ public class DragLayout extends FrameLayout {
         } else {
             vg_main.layout(0, 0, width, height);
             dispatchDragEvent(0);
+        }
+    }
+
+
+    /**
+     * ev.getX() >=Float.valueOf(location[0]) && ev.getX() < Float.valueOf(location[0]) &&
+     ev.getY() >= Float.valueOf(location[1]) && ev.getY() < Float.valueOf(location[1])
+     * 判断左边是否在次布局中
+     * */
+    private boolean isInThisView(int x,int y,View view){
+        int[] location = new int[2];
+        mIgnoredViews.getLocationOnScreen(location);
+        int migv_left = location[0]+mIgnoredViews.getLeft();
+        int minv_rigit=location[0]+mIgnoredViews.getRight();
+        int minv_top = location[1]+mIgnoredViews.getTop();
+        int minv_bottom = location[1]+mIgnoredViews.getBottom();
+        if(x >= migv_left && x < minv_rigit &&
+                y >= minv_top && y < minv_bottom){
+            return true;
+        }else {
+            return false;
         }
     }
 

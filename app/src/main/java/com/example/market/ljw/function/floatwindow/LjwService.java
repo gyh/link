@@ -23,10 +23,10 @@ import android.widget.Toast;
 
 import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.AppContext;
+import com.example.market.ljw.core.common.frame.AppContext;
 import com.example.market.ljw.function.glowpadview.LockActivity;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.Utils;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.Utils;
 
 import static java.lang.Thread.sleep;
 

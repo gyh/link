@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.AdvertisementOutput;
@@ -133,6 +134,7 @@ public class CarouselFragment extends MyActivity {
                         //------记录本地结束
                         initPagerPic();
                         handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
+                        ((MainActivity)getBaseActivity()).initDragLayout();
                     } else {
                         fragmentview.setVisibility(View.GONE);
                         PopUtils.showToast(advertisementOutput.getErrmsg());
@@ -159,6 +161,7 @@ public class CarouselFragment extends MyActivity {
                 initPagerPic();
                 handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
             }
+            ((MainActivity)getBaseActivity()).initDragLayout();
         }
     }
 
