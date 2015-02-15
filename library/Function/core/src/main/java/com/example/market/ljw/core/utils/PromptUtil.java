@@ -31,6 +31,10 @@ public class PromptUtil {
 
     public static void showExitAlert(final NiftyDialogBuilder dialogBuilder,BaseActivity baseActivity, Effectstype effect, View view,
                                      View.OnClickListener clickyes){
+        if(dialogBuilder == null){
+            baseActivity.finish();
+            return;
+        }
         dialogBuilder
                 .withTitle("链接网")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def

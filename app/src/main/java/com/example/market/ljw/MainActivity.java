@@ -1,6 +1,10 @@
 package com.example.market.ljw;
 
+
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.*;
 import android.os.Process;
@@ -10,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.market.ljw.core.common.frame.BaseActivity;
 import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
 import com.example.market.ljw.core.common.frame.taskstack.BackStackManager;
@@ -26,13 +29,13 @@ import com.example.market.ljw.core.utils.Utils;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.Member;
 import com.example.market.ljw.entity.bean.output.MemberOutput;
-
 import com.example.market.ljw.fragment.AppListFragment;
 import com.example.market.ljw.fragment.CarouselFragment;
 import com.example.market.ljw.fragment.MarketListFragment;
 import com.example.market.ljw.fragment.WebViewFragment;
 import com.example.market.ljw.function.reddotface.view.DragLayout;
-import com.example.market.ljw.function.service.FxService;
+import com.example.market.ljw.function.floatwindow.LjwService;
+import com.example.market.ljw.function.floatwindow.ServiceInterface;
 import com.example.market.ljw.service.InputDataUtils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -59,7 +62,7 @@ public class MainActivity extends BaseActivity {
     private final long delayMillis = 1000;//定义的一秒
     private long intervalTime = 10; //定义的心跳
     private boolean isRunning = false;//定义是否开启线程
-    private Intent intentfxService;//悬浮窗口配置
+    private Intent intentfxService = null;//悬浮窗口配置
     private long mRequetTimeInFuture = 0;//记录上一次提交时间
     private boolean isCanAddscore = true;
     private List<String> urlList = new ArrayList<String>();;
@@ -80,6 +83,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ljw_new);
         ApplicationManager.clearBackStack();
+        initView();
         //添加广告图片
         CarouselFragment carouselFragment = new CarouselFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
@@ -91,7 +95,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Constant.theNextLen = 10;//重置倒计时时间
+        Constant.theNextLen = Constant.theWaitTime;//重置倒计时时间
         Constant.makeAppName = Constant.PACKAGENAME;
     }
 
@@ -104,6 +108,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         isRunning = false;//结束积分线程
+        mService.hidden();
         if (localMiaoShaUtil != null)
             localMiaoShaUtil.countdownCancel();
         Utils.showSystem("onDestroy", isRunning + "");
@@ -154,7 +159,7 @@ public class MainActivity extends BaseActivity {
         intervalTime = Long.valueOf(member.getClientSubmitInterval());//心跳时间
         isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
         localMiaoShaUtil = new MiaoshaUtil();//倒计时
-        initView();
+        initViewData();
         if (isCanAddscore) {
             startTimeNum();
         }
@@ -251,6 +256,12 @@ public class MainActivity extends BaseActivity {
         tvusername = (TextView) findViewById(R.id.tvusername);
         tvnumber = (TextView) findViewById(R.id.tvnumber);
         tvtime = (TextView) findViewById(R.id.tvtime);
+    }
+
+    /**
+     * 初始化视图数据
+     * */
+    private void initViewData(){
         tvusername.setText("账号：" + member.getLoginName());
         tvnumber.setText("积分：" + member.getTodayScore());
         logimg.setOnClickListener(new View.OnClickListener() {
@@ -359,11 +370,34 @@ public class MainActivity extends BaseActivity {
      * 初始化服务
      */
     private void initService() {
-        intentfxService = new Intent(MainActivity.this, FxService.class);
-        if (!Utils.isServiceRunning(this, FxService.class.getName())) {
-            startService(intentfxService);//开启浮动窗口服务
+        intentfxService = new Intent(MainActivity.this, LjwService.class);
+        if (!Utils.isServiceRunning(this, LjwService.class.getName())) {
+            bindService(intentfxService, sconnection, Context.BIND_AUTO_CREATE);
         }
     }
+
+    private LjwService serviceBinder;
+    /* 注册接口方法*/
+    ServiceInterface mService = null;
+    /* 绑定service监听*/
+    ServiceConnection sconnection = new ServiceConnection() {
+        /*当绑定时执行*/
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = (ServiceInterface) service;
+            if (mService != null) {
+                mService.show();//测试方法
+            }
+            Intent intent = new Intent();//这里只是为了下面传intent对象而构建的，没有实际意义
+			/*绑定后就可以使用Service的相关方法和属性来开始你对Service的操作*/
+            serviceBinder = ((LjwService.MyBinder) service).getService();
+			/*比如：你可以掉用Service的onStartCommand()方法*/
+            serviceBinder.onStartCommand(intent, 0, 0);//0,0是我随意的参数
+        }
+        /*当断开绑定时执行，但调用unbindService()时不会触发改方法*/
+        public void onServiceDisconnected(ComponentName name) {
+            mService.hidden();
+        }
+    };
 
     /**
      * 初始化商城列表
@@ -399,7 +433,9 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(View view) {
                                 dialogBuilder.dismiss();
-                                stopService(intentfxService);//去除悬浮窗口
+                                if(intentfxService != null){
+                                    stopService(intentfxService);//去除悬浮窗口
+                                }
                                 finish();
                             }
                         });

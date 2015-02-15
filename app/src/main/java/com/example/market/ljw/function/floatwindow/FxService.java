@@ -1,4 +1,4 @@
-package com.example.market.ljw.function.service;
+package com.example.market.ljw.function.floatwindow;
 
 import android.app.KeyguardManager;
 import android.app.Service;
@@ -28,6 +28,7 @@ import com.example.market.ljw.core.utils.Utils;
 
 import static java.lang.Thread.sleep;
 
+@Deprecated
 public class FxService extends Service {
     private final String ACT_SCREEN_OFF = "android.intent.action.SCREEN_OFF";
     private final String ACT_SCREEN_ON = "android.intent.action.SCREEN_ON";

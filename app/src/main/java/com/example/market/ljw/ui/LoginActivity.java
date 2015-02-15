@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
@@ -42,6 +43,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private EditText password;//密码
     private View btlogin,registerbtn;//登陆，注册按钮
     private CheckBox reUsername,reUserpassword;//记住用户名 密码
+    private TextView versiontv ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * */
     private void initView(){
         //初始化视图
+        versiontv = (TextView)findViewById(R.id.tv_version);
         registerbtn = findViewById(R.id.registerbtn);
         reUsername = (CheckBox)findViewById(R.id.reUsername);
         reUserpassword = (CheckBox)findViewById(R.id.reUserpassword);
@@ -81,6 +84,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }else {
             reUserpassword.setChecked(false);//设置不记住密码
         }
+        try {
+            String versionstr = Utils.getVersionName(this);
+            versiontv.setText("版本号："+versionstr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
