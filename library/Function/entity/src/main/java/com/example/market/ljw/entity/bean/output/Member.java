@@ -22,8 +22,15 @@ public class Member implements Serializable{
     private String MemberTypeCode; //会员类型
     private String ServerTime;//
 
+    /**
+     * 过滤服务器时间
+     * */
     public String getServerTime() {
-        return ServerTime;
+        String stetime = ServerTime.replace("T"," ");
+        if(stetime.contains(".")){
+            stetime = stetime.substring(0,stetime.indexOf("."));
+        }
+        return stetime;
     }
 
     public void setServerTime(String serverTime) {

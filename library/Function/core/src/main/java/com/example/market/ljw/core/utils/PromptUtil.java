@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.market.ljw.core.R;
 import com.example.market.ljw.core.common.frame.BaseActivity;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -41,14 +42,14 @@ public class PromptUtil {
                 .withDividerColor("#11000000")                              //def
                 .withMessage("确定要退出积分系统！")                     //.withMessage(null)  no Msg
                 .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-//                .withDialogColor(baseActivity.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
-//                .withIcon(baseActivity.getResources().getDrawable(R.drawable.ic_launcher))
+                .withDialogColor(baseActivity.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
+                .withIcon(baseActivity.getResources().getDrawable(R.drawable.ic_launcher))
                 .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
                 .withDuration(700)                                          //def
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("确定")                                      //def gone
                 .withButton2Text("取消")                                  //def gone
-//                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
+                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
                 .setButton1Click(clickyes)
                 .setButton2Click(new View.OnClickListener() {
                     @Override
@@ -67,14 +68,14 @@ public class PromptUtil {
                 .withDividerColor("#11000000")                              //def
                 .withMessage("请先设置悬浮窗口！")                     //.withMessage(null)  no Msg
                 .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-//                .withDialogColor(baseActivity.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
-//                .withIcon(baseActivity.getResources().getDrawable(R.drawable.ic_launcher))
+                .withDialogColor(baseActivity.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
+                .withIcon(baseActivity.getResources().getDrawable(R.drawable.ic_launcher))
                 .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                 .withDuration(700)                                          //def
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("我去设置")                                      //def gone
                 .withButton2Text("我已设置")                                  //def gone
-//                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
+                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
                 .setButton1Click(clickfirst)
                 .setButton2Click(clicksecond)
                 .show();
@@ -88,14 +89,14 @@ public class PromptUtil {
                 .withDividerColor("#11000000")                              //def
                 .withMessage("请连接网络！")                     //.withMessage(null)  no Msg
                 .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-//                .withDialogColor(baseActivity.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
-//                .withIcon(baseActivity.getResources().getDrawable(R.drawable.ic_launcher))
+                .withDialogColor(baseActivity.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
+                .withIcon(baseActivity.getResources().getDrawable(R.drawable.ic_launcher))
                 .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
                 .withDuration(700)                                          //def
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("我已连网")                                      //def gone
                 .withButton2Text("我去设置")                                  //def gone
-//                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
+                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
                 .setButton1Click(clickfirst)
                 .setButton2Click(clicksecond)
                 .show();
@@ -109,14 +110,14 @@ public class PromptUtil {
                 .withDividerColor("#11000000")                              //def
                 .withMessage(msg)                     //.withMessage(null)  no Msg
                 .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-//                .withDialogColor(context.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
-//                .withIcon(context.getResources().getDrawable(R.drawable.ic_launcher))
+                .withDialogColor(context.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
+                .withIcon(context.getResources().getDrawable(R.drawable.ic_launcher))
                 .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                 .withDuration(700)                                          //def
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("暂不升级")                                      //def gone
                 .withButton2Text("立刻升级")                                  //def gone
-//                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
+                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
                 .setButton1Click(clickfirst)
                 .setButton2Click(clicksecond)
                 .show();
@@ -130,15 +131,15 @@ public class PromptUtil {
                 .withDividerColor("#11000000")                              //def
                 .withMessage(msg)                     //.withMessage(null)  no Msg
                 .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-//                .withDialogColor(context.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
-//                .withIcon(context.getResources().getDrawable(R.drawable.ic_launcher))
+                .withDialogColor(context.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
+                .withIcon(context.getResources().getDrawable(R.drawable.ic_launcher))
                 .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                 .isCancelable(false)
                 .withDuration(700)                                          //def
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("确定")                                      //def gone
                 .withButton2Text("取消")                                  //def gone
-//                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
+                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
                 .setButton1Click(clickfirst)
                 .setButton2Click(clicksecond)
                 .show();
@@ -152,14 +153,14 @@ public class PromptUtil {
                 .withDividerColor("#11000000")                              //def
                 .withMessage(msg)                     //.withMessage(null)  no Msg
                 .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-//                .withDialogColor(context.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
-//                .withIcon(context.getResources().getDrawable(R.drawable.ic_launcher))
+                .withDialogColor(context.getResources().getColor(R.color.theme))                               //def  | withDialogColor(int resid)
+                .withIcon(context.getResources().getDrawable(R.drawable.ic_launcher))
                 .isCancelableOnTouchOutside(false)                           //def    | isCancelable(true)
                 .isCancelable(false)
                 .withDuration(700)                                          //def
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("确定")                                      //def gone
-//                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
+                .setCustomView(R.layout.custom_view,view.getContext())         //.setCustomView(View or ResId,context)
                 .setButton1Click(clickfirst)
                 .show();
     }

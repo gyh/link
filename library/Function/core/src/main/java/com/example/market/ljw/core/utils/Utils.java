@@ -257,23 +257,20 @@ public class Utils {
 
     /**
      * 判断是否能够加积分
+     * 2015-03-13T15:11:28.6076968+08:00
      * */
     public static boolean isCanAddScore(String timeStr){
-       String hour = "0";
-       if("".equals(timeStr)){
-           SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-           try {
-               Date timeb = df.parse(getCurrentDate());
-               hour = timeb.getHours()+"";
-           } catch (ParseException e) {
-               e.printStackTrace();
-           }
-           Utils.showSystem("empty","hour = "+hour);
-       }else {
-           hour = timeStr.substring(timeStr.indexOf("T")+1, timeStr.indexOf(":"));
-           Utils.showSystem("noempty","hour = "+hour);
-       }
-        if(Integer.valueOf(hour)<6){
+       int serverhour = 0;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        try {
+            Date timeb = df.parse(timeStr);
+            Calendar c12 = Calendar.getInstance();
+            c12.setTime(timeb);
+            serverhour = c12.get(c12.HOUR_OF_DAY);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(serverhour<6){
             return false;
         }else {
             return true;

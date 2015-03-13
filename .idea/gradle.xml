@@ -10,11 +10,11 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/library" />
-            <option value="$PROJECT_DIR$/library/Function" />
-            <option value="$PROJECT_DIR$/library/Function/NiftyDialogEffects" />
-            <option value="$PROJECT_DIR$/library/Function/core" />
-            <option value="$PROJECT_DIR$/library/Function/db" />
-            <option value="$PROJECT_DIR$/library/Function/entity" />
+            <option value="$PROJECT_DIR$/library/function" />
+            <option value="$PROJECT_DIR$/library/function/NiftyDialogEffects" />
+            <option value="$PROJECT_DIR$/library/function/core" />
+            <option value="$PROJECT_DIR$/library/function/db" />
+            <option value="$PROJECT_DIR$/library/function/entity" />
             <option value="$PROJECT_DIR$/library/service" />
             <option value="$PROJECT_DIR$/library/service/lock" />
           </set>

@@ -28,6 +28,7 @@ import com.example.market.ljw.core.utils.MyCountdownTimer;
 import com.example.market.ljw.core.utils.PopUtils;
 import com.example.market.ljw.core.utils.PromptUtil;
 import com.example.market.ljw.core.utils.Utils;
+import com.example.market.ljw.core.utils.UtilsServer;
 import com.example.market.ljw.core.utils.view.DragLayout;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.Member;
@@ -108,9 +109,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        unbindService(sconnection);
         super.onDestroy();
         isRunning = false;//结束积分线程
-        mService.hidden();
         if (localMiaoShaUtil != null)
             localMiaoShaUtil.countdownCancel();
         Utils.showSystem("onDestroy", isRunning + "");
@@ -290,9 +291,11 @@ public class MainActivity extends BaseActivity {
                 while (isRunning) {//提交数据循环
                     try {
                         sleep(delayMillis*10);//心跳时间
+                        Utils.showSystem("gyh server",member.getServerTime());
                         if (!Utils.isNetworkConnected(MainActivity.this)) {//判断是否有网络
-                            //没有网络的时候
-                            isCanAddscore = Utils.isCanAddScore("");
+                            //没有网络的时候,修改服务器时间
+                            member.setServerTime(UtilsServer.modifyServerTime(member.getServerTime(),10));
+                            isCanAddscore = Utils.isCanAddScore(member.getServerTime());
                             if (!isCanAddscore && localMiaoShaUtil != null) {
                                 localMiaoShaUtil.countdownCancel();
                                 member.setDuration(0);
