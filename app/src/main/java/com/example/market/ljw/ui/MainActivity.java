@@ -387,11 +387,11 @@ public class MainActivity extends BaseActivity {
             if (mService != null) {
                 mService.show();//测试方法
             }
-            Intent intent = new Intent();//这里只是为了下面传intent对象而构建的，没有实际意义
-			/*绑定后就可以使用Service的相关方法和属性来开始你对Service的操作*/
+//            Intent intent = new Intent();//这里只是为了下面传intent对象而构建的，没有实际意义
+//			/*绑定后就可以使用Service的相关方法和属性来开始你对Service的操作*/
             serviceBinder = ((LjwService.MyBinder) service).getService();
-			/*比如：你可以掉用Service的onStartCommand()方法*/
-            serviceBinder.onStartCommand(intent, 0, 0);//0,0是我随意的参数
+//			/*比如：你可以掉用Service的onStartCommand()方法*/
+//            serviceBinder.onStartCommand(intent, 0, 0);//0,0是我随意的参数
         }
         /*当断开绑定时执行，但调用unbindService()时不会触发改方法*/
         public void onServiceDisconnected(ComponentName name) {
@@ -433,9 +433,6 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(View view) {
                                 dialogBuilder.dismiss();
-                                if(intentfxService != null){
-                                    stopService(intentfxService);//去除悬浮窗口
-                                }
                                 finish();
                             }
                         });

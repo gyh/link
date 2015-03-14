@@ -92,6 +92,7 @@ public class LjwService extends Service implements View.OnClickListener {
                         isShowView = Utils.isAppOnForeground(LjwService.this);
                         //判断等待时间是否结束
                         if (isShowView && mainActivityIsRun) {
+                            Utils.showSystem("service isshowview","111");
                             if (Constant.makeAppName.equals(Constant.MMSPACKAGENAME) ||
                                     Constant.makeAppName.equals(Constant.CONTACTSPACKAGENAME)) {
                                 clockhandler.sendEmptyMessage(4);
@@ -117,10 +118,12 @@ public class LjwService extends Service implements View.OnClickListener {
     @Override
     public void onDestroy() {
         // TODO Auto-generated method stub
-        super.onDestroy();
+        Utils.showSystem("service ","destroy");
         isrunning = false;
+        mainActivityIsRun = false;
         MyWindowManager.hiddenSmallWindow();
         unregisterReceiver(mScreenBCR);
+        super.onDestroy();
     }
 
     @Override
