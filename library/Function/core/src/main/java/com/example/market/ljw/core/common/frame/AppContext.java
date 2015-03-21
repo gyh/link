@@ -13,7 +13,6 @@ import java.util.List;
 public class AppContext extends android.app.Application{
 
     private static AppContext app;
-
     private BaseActivity baseActivity;
     //存储的所有页面
     private static List<Activity> tempActiviyts = new ArrayList<Activity>();
@@ -82,5 +81,13 @@ public class AppContext extends android.app.Application{
     public void runOnUIThread(Runnable uiTask) {
         if (baseActivity != null)
             baseActivity.runOnUiThread(uiTask);
+    }
+
+    public void setMainActivity(Class mainActivity) {
+        this.mainActivity = mainActivity;
+    }
+
+    public Class getMainActivity() {
+        return mainActivity;
     }
 }

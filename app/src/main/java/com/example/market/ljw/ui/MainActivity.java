@@ -10,12 +10,11 @@ import android.os.*;
 import android.os.Process;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.market.ljw.R;
+import com.example.market.ljw.core.common.frame.AppContext;
 import com.example.market.ljw.core.common.frame.BaseActivity;
 import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
 import com.example.market.ljw.core.common.frame.taskstack.BackStackManager;
@@ -29,7 +28,6 @@ import com.example.market.ljw.core.utils.PopUtils;
 import com.example.market.ljw.core.utils.PromptUtil;
 import com.example.market.ljw.core.utils.Utils;
 import com.example.market.ljw.core.utils.UtilsServer;
-import com.example.market.ljw.core.utils.view.DragLayout;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.Member;
 import com.example.market.ljw.entity.bean.output.MemberOutput;
@@ -43,9 +41,7 @@ import com.example.market.ljw.service.InputDataUtils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.Thread.sleep;
@@ -57,18 +53,14 @@ public class MainActivity extends BaseActivity {
     private TextView tvusername;//用户名显示view
     private TextView tvnumber;//积分显示视图
     private TextView tvtime;//时间显示视图
-    private TextView tvAppVersion;
-    private DragLayout ljwview;//背景视图
-    private View fragmentlayout;
+    private FrameLayout ljwview;//背景视图
     private View logimg;
-    private ListView listview;
     private final long delayMillis = 1000;//定义的一秒
     private long intervalTime = 10; //定义的心跳
     private boolean isRunning = false;//定义是否开启线程
     private Intent intentfxService = null;//悬浮窗口配置
     private long mRequetTimeInFuture = 0;//记录上一次提交时间
     private boolean isCanAddscore = true;
-    private List<String> urlList = new ArrayList<String>();;
     //倒计时工具类
     private MiaoshaUtil localMiaoShaUtil;
     Handler refhandler = new Handler() {//积分获取后改变的ui线程
@@ -86,12 +78,15 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ljw);
         ApplicationManager.clearBackStack();
+        AppContext.getInstance().setMainActivity(this.getClass());
         initView();
         //添加广告图片
-        CarouselFragment carouselFragment = new CarouselFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
         AppListFragment.AppListFragmentTM appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
         ApplicationManager.go(appListFragmentTM);
+
+        CarouselFragment carouselFragment = new CarouselFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
+
         getMemberInfo();//开始
     }
 
@@ -171,32 +166,6 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 初始化qq样式
-     * */
-    public void initDragLayout() {
-        ljwview.setmIgnoredViews(findViewById(R.id.carouselfragment));
-        ljwview.setDragListener(new DragLayout.DragListener() {
-            @Override
-            public void onOpen() {
-            }
-
-            @Override
-            public void onClose() {
-            }
-
-            @Override
-            public void onDrag(float percent) {
-            }
-        });
-        tvusername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ljwview.open();
-            }
-        });
-    }
-
-    /**
      * 开始计数
      */
     private void startTimeNum() {
@@ -221,41 +190,13 @@ public class MainActivity extends BaseActivity {
      * 初始化视图
      */
     private void initView() {
-        //版本号
-        tvAppVersion = (TextView)findViewById(R.id.tv_app_version);
-        //设置当前版本号
-        try {
-            tvAppVersion.setText("版本号："+Utils.getVersionName(this));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //初始化点击菜单列表
-        urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberShop/Default.aspx" +
-                "&token="+getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
-        urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberCenterHome.aspx" +
-                "&token="+getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
-        //菜单列表
-        listview = (ListView)findViewById(R.id.listview);
-        listview.setAdapter(new ArrayAdapter<String>(MainActivity.this,
-                R.layout.layout_ljw_listviewitem, new String[] { "我的商城", "会员中心"}));
-        //菜单列表点击事件跳转到商场
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ljwview.close();
-                showWebView(0, urlList.get(i));
-            }
-        });
-        fragmentlayout = findViewById(R.id.fragmentlayout);
         logimg = findViewById(R.id.logimg);
-        ljwview = (DragLayout)findViewById(R.id.layoutljw);
+        ljwview = (FrameLayout)findViewById(R.id.layoutljw);
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             ljwview.setBackgroundDrawable(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
-            fragmentlayout.setBackgroundDrawable(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
         } else {
             ljwview.setBackground(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
-            fragmentlayout.setBackground(new BitmapDrawable(getResources(), Utils.getAndroidSystmeBtmp(this)));
         }
         tvusername = (TextView) findViewById(R.id.tvusername);
         tvnumber = (TextView) findViewById(R.id.tvnumber);
@@ -372,7 +313,12 @@ public class MainActivity extends BaseActivity {
     private void initService() {
         intentfxService = new Intent(MainActivity.this, LjwService.class);
         if (!Utils.isServiceRunning(this, LjwService.class.getName())) {
-            bindService(intentfxService, sconnection, Context.BIND_AUTO_CREATE);
+            try {
+                bindService(intentfxService, sconnection, Context.BIND_AUTO_CREATE);
+            }catch (Exception e){
+                finish();
+            }
+
         }
     }
 

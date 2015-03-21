@@ -1,78 +1,26 @@
-<com.example.market.ljw.core.utils.view.DragLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layoutljw"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <include layout="@layout/layout_ljw_top"/>
+    <LinearLayout
+        android:id="@+id/rightlayoutview"
+        android:layout_marginTop="47dp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="30dp"
-        android:paddingTop="50dp" >
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:id="@+id/ll1"
-            android:paddingLeft="30dp"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-            <ImageView
-                android:id="@+id/iv_bottom"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/ic_launcher" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:text="链接网"
-                android:textColor="#ffffff"
-                android:textSize="25sp" />
-        </LinearLayout>
-        <TextView
-            android:paddingLeft="30dp"
-            android:id="@+id/tv_app_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:textColor="#ffffff"
-            android:textSize="15sp" />
-        <ListView
-            android:id="@+id/listview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/tv_app_version"
-            android:layout_below="@id/ll1"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="20dp"
-            android:cacheColorHint="#00000000"
-            android:divider="@color/fount_bg"
-            android:dividerHeight="1dp"
-            android:textColor="#ffffff"
-            android:listSelector="@drawable/bg_ljw_listitem"/>
-    </RelativeLayout>
-    <com.example.market.ljw.core.utils.view.MyFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragmentlayout">
-        <include layout="@layout/layout_ljw_top"/>
+            android:id="@+id/carouselfragment"/>
         <LinearLayout
-            android:id="@+id/rightlayoutview"
-            android:layout_marginTop="47dp"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/carouselfragment"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1"
-                android:id="@+id/contain"/>
-        </LinearLayout>
-    </com.example.market.ljw.core.utils.view.MyFrameLayout>
-</com.example.market.ljw.core.utils.view.DragLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:id="@+id/contain"/>
+    </LinearLayout>
+</FrameLayout>
 

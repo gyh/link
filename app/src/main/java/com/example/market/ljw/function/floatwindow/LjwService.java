@@ -39,10 +39,12 @@ public class LjwService extends Service implements View.OnClickListener {
             //比较当前应用的包名是否是应用包名或者打开的包名
             if (msg.what == 4) {
                 Constant.makeAppName = Constant.PACKAGENAME;
-                Intent it = new Intent(LjwService.this, MainActivity.class);
-                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
-                startActivity(it);
+                Intent intent = Utils.getLJWAppIntent2(LjwService.this);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
+                startActivity(intent);
             } else if (msg.what == 6) {
                 MyWindowManager.hiddenSmallWindow();
             } else if (msg.what == 5) {

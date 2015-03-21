@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.market.ljw">
-
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
@@ -59,14 +58,16 @@
         </activity>
         <activity android:name=".ui.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"/>
 
         <provider
             android:name=".db.provider.DataProvider"
             android:authorities="com.example.market.ljw"
             android:exported="false" />
         <activity android:name=".glowpadview.LockActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".ui.LoginActivity"
             android:screenOrientation="portrait"/>

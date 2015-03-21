@@ -134,7 +134,6 @@ public class CarouselFragment extends MyActivity {
                         //------记录本地结束
                         initPagerPic();
                         handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
-                        ((MainActivity)getBaseActivity()).initDragLayout();
                     } else {
                         fragmentview.setVisibility(View.GONE);
                         PopUtils.showToast(advertisementOutput.getErrmsg());
@@ -161,7 +160,6 @@ public class CarouselFragment extends MyActivity {
                 initPagerPic();
                 handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
             }
-            ((MainActivity)getBaseActivity()).initDragLayout();
         }
     }
 

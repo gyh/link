@@ -3,6 +3,7 @@ package com.example.market.ljw.core.utils;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.WallpaperManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -158,6 +159,38 @@ public class Utils {
             }
         }
         return intent;
+    }
+
+    private static List<ResolveInfo> infoList = null;
+    public static  List<ResolveInfo> getRunableList(PackageManager pm, boolean reload) {
+        if (infoList == null || reload == true) {
+            Intent baseIntent = new Intent(Intent.ACTION_MAIN);
+            baseIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            infoList = pm.queryIntentActivities(baseIntent, 0);
+        }
+        return infoList;
+    }
+    public static Intent getIntent(String packageName, PackageManager pm) {
+        List<ResolveInfo> list = getRunableList(pm, false);
+        for (ResolveInfo info : list) {
+            if (packageName.equals(info.activityInfo.packageName)) {
+                ComponentName componet = new ComponentName(packageName, info.activityInfo.name);
+                Intent i = new Intent();
+                i.setComponent(componet);
+
+                return i;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取跳转应用
+     * */
+    public static Intent getLJWAppIntent2(Context context){
+        PackageManager pm = context.getPackageManager();
+        Intent i = getIntent(context.getPackageName(),pm);
+        return i;
     }
 
     /**
