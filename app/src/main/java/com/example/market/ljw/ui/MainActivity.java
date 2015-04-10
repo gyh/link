@@ -81,11 +81,12 @@ public class MainActivity extends BaseActivity {
         AppContext.getInstance().setMainActivity(this.getClass());
         initView();
         //添加广告图片
+        CarouselFragment carouselFragment = new CarouselFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
+
         AppListFragment.AppListFragmentTM appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
         ApplicationManager.go(appListFragmentTM);
 
-        CarouselFragment carouselFragment = new CarouselFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
 
         getMemberInfo();//开始
     }
