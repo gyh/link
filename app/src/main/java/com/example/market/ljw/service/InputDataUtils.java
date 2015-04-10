@@ -1,5 +1,8 @@
 package com.example.market.ljw.service;
 
+import android.content.Context;
+
+import com.example.market.ljw.core.utils.Utils;
 import com.example.market.ljw.entity.bean.input.LoginUser;
 import com.example.market.ljw.core.utils.Constant;
 import com.example.market.ljw.core.utils.Log;
@@ -42,6 +45,19 @@ public class InputDataUtils {
         loginUser.setLoginName(username);
         loginUser.setPassword(password);
         loginUser.setClientType(Constant.ClientType);
+        return loginUser;
+    }
+
+    public static LoginUser getLoginData(String username,String password,Context context){
+        LoginUser loginUser = new LoginUser();
+        loginUser.setLoginName(username);
+        loginUser.setPassword(password);
+        loginUser.setClientType(Constant.ClientType);
+        try {
+            loginUser.setVersion(Utils.getVersionName(context));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return loginUser;
     }
 

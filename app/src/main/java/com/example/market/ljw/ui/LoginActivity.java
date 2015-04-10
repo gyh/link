@@ -190,8 +190,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         Map<String, Object> param = new LinkedHashMap<String, Object>();
         param.put(Constant.RequestKeys.SERVICENAME, "member_login");
         param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.getLoginData(
-                username.getText().toString(),password.getText().toString())));
-        showProgressDialog(R.string.loginning,true);
+                username.getText().toString(),password.getText().toString(),this)));
+        showProgressDialog(R.string.loginning, true);
         execute(Constant.SERVER_URL, true, param, null, new HttpGroup.OnEndListener() {
             @Override
             public void onEnd(HttpResponse httpresponse) {

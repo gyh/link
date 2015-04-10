@@ -12,6 +12,15 @@ public class LoginUser {
     private String tooken;
     private long Duration;
     private String MemberID;
+    private String Version;
+
+    public String getVersion() {
+        return Version;
+    }
+
+    public void setVersion(String version) {
+        Version = version;
+    }
 
     public String getLoginName() {
         return LoginName;
