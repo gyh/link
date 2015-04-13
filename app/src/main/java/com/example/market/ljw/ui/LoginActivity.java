@@ -8,27 +8,20 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.market.ljw.LJWActivity;
-import com.example.market.ljw.MainActivity;
 import com.example.market.ljw.R;
-import com.example.market.ljw.bean.Entity;
-import com.example.market.ljw.bean.input.LoginUser;
-import com.example.market.ljw.bean.output.LoginOutput;
-import com.example.market.ljw.bean.output.Member;
-import com.example.market.ljw.common.frame.BaseActivity;
-import com.example.market.ljw.common.http.HttpGroup;
-import com.example.market.ljw.common.http.HttpResponse;
+import com.example.market.ljw.entity.bean.Entity;
+import com.example.market.ljw.core.common.frame.BaseActivity;
+import com.example.market.ljw.core.common.http.HttpGroup;
+import com.example.market.ljw.core.common.http.HttpResponse;
+import com.example.market.ljw.entity.bean.LoginOutput;
 import com.example.market.ljw.service.InputDataUtils;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.PopUtils;
-import com.example.market.ljw.utils.PromptUtil;
-import com.example.market.ljw.utils.StringUtils;
-import com.example.market.ljw.utils.Utils;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.PopUtils;
+import com.example.market.ljw.core.utils.PromptUtil;
+import com.example.market.ljw.core.utils.StringUtils;
+import com.example.market.ljw.core.utils.Utils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -197,8 +190,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         Map<String, Object> param = new LinkedHashMap<String, Object>();
         param.put(Constant.RequestKeys.SERVICENAME, "member_login");
         param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.getLoginData(
-                username.getText().toString(),password.getText().toString())));
-        showProgressDialog(R.string.loginning,true);
+                username.getText().toString(),password.getText().toString(),this)));
+        showProgressDialog(R.string.loginning, true);
         execute(Constant.SERVER_URL, true, param, null, new HttpGroup.OnEndListener() {
             @Override
             public void onEnd(HttpResponse httpresponse) {

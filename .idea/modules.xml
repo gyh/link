@@ -3,8 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LJW.iml" filepath="$PROJECT_DIR$/LJW.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/NiftyDialogEffects/NiftyDialogEffects.iml" filepath="$PROJECT_DIR$/library/NiftyDialogEffects/NiftyDialogEffects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/Function/NiftyDialogEffects/NiftyDialogEffects.iml" filepath="$PROJECT_DIR$/library/Function/NiftyDialogEffects/NiftyDialogEffects.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/Function/core/core.iml" filepath="$PROJECT_DIR$/library/Function/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/Function/db/db.iml" filepath="$PROJECT_DIR$/library/Function/db/db.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/Function/entity/entity.iml" filepath="$PROJECT_DIR$/library/Function/entity/entity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/service/lock/lock.iml" filepath="$PROJECT_DIR$/library/service/lock/lock.iml" />
     </modules>
   </component>
 </project>

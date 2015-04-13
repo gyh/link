@@ -15,16 +15,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.market.ljw.LJWActivity;
-import com.example.market.ljw.MainActivity;
+import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
-import com.example.market.ljw.bean.AppsItemInfo;
-import com.example.market.ljw.common.frame.MyActivity;
-import com.example.market.ljw.common.frame.taskstack.NeedShowAgainModule;
+import com.example.market.ljw.core.utils.AppsItemInfo;
+import com.example.market.ljw.core.common.frame.MyActivity;
+import com.example.market.ljw.core.common.frame.taskstack.NeedShowAgainModule;
 import com.example.market.ljw.service.ApplistAdapter;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.DateUtils;
-import com.example.market.ljw.utils.Utils;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.DateUtils;
+import com.example.market.ljw.core.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
         pManager = getActivity().getPackageManager();
         List<ApplicationInfo> applicationInfos = Utils.getInstallAppInfo(getActivity());
         AppsItemInfo ljw = new AppsItemInfo();
-        ljw.setLabel("链接网");
+        ljw.setlabelName("链接网");
         appsItemInfos.add(ljw);
         intentList.add(null);
         for (int i = 0; i < applicationInfos.size(); i++) {
@@ -106,8 +105,8 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
             // 设置图片
             shareItem.setIcon(pManager.getApplicationIcon(pinfo));
             // 设置应用程序名字
-            shareItem.setLabel(pManager.getApplicationLabel(pinfo).toString());
-            Utils.showSystem("pManager","Label"+shareItem.getLabel());
+            shareItem.setlabelName(pManager.getApplicationLabel(pinfo).toString());
+            Utils.showSystem("pManager","Label"+shareItem.getlabelName());
             // 设置应用程序的包名
             shareItem.setPackageName(pinfo.packageName);
             Utils.showSystem("pManager","PackageName"+shareItem.getPackageName());

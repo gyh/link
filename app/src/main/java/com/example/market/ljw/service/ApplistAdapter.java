@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.market.ljw.R;
-import com.example.market.ljw.bean.AppsItemInfo;
+import com.example.market.ljw.core.utils.AppsItemInfo;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class ApplistAdapter extends BaseAdapter {
         }
 
         holder.icon.setImageDrawable(appsItemInfoList.get(position).getIcon());
-        holder.label.setText(appsItemInfoList.get(position).getLabel().toString());
+        holder.label.setText(appsItemInfoList.get(position).getlabelName().toString());
 
         return convertView;
 

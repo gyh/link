@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.example.market.ljw.MainActivity;
+import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
-import com.example.market.ljw.utils.Constant;
+import com.example.market.ljw.core.utils.Constant;
 
 import java.lang.reflect.Field;
 

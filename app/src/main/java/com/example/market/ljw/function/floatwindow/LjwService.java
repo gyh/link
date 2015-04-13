@@ -6,27 +6,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.example.market.ljw.MainActivity;
+import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
-import com.example.market.ljw.common.frame.AppContext;
-import com.example.market.ljw.function.glowpadview.LockActivity;
-import com.example.market.ljw.utils.Constant;
-import com.example.market.ljw.utils.Utils;
+import com.example.market.ljw.core.common.frame.AppContext;
+import com.example.market.ljw.glowpadview.LockActivity;
+import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.core.utils.Utils;
 
 import static java.lang.Thread.sleep;
 
@@ -48,10 +39,12 @@ public class LjwService extends Service implements View.OnClickListener {
             //比较当前应用的包名是否是应用包名或者打开的包名
             if (msg.what == 4) {
                 Constant.makeAppName = Constant.PACKAGENAME;
-                Intent it = new Intent(LjwService.this, MainActivity.class);
-                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
-                startActivity(it);
+                Intent intent = Utils.getLJWAppIntent2(LjwService.this);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
+                startActivity(intent);
             } else if (msg.what == 6) {
                 MyWindowManager.hiddenSmallWindow();
             } else if (msg.what == 5) {
@@ -101,6 +94,7 @@ public class LjwService extends Service implements View.OnClickListener {
                         isShowView = Utils.isAppOnForeground(LjwService.this);
                         //判断等待时间是否结束
                         if (isShowView && mainActivityIsRun) {
+                            Utils.showSystem("service isshowview","111");
                             if (Constant.makeAppName.equals(Constant.MMSPACKAGENAME) ||
                                     Constant.makeAppName.equals(Constant.CONTACTSPACKAGENAME)) {
                                 clockhandler.sendEmptyMessage(4);
@@ -126,10 +120,12 @@ public class LjwService extends Service implements View.OnClickListener {
     @Override
     public void onDestroy() {
         // TODO Auto-generated method stub
-        super.onDestroy();
+        Utils.showSystem("service ","destroy");
         isrunning = false;
+        mainActivityIsRun = false;
         MyWindowManager.hiddenSmallWindow();
         unregisterReceiver(mScreenBCR);
+        super.onDestroy();
     }
 
     @Override
