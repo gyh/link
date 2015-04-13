@@ -34,7 +34,7 @@ public class Constant {
     public static String REGISTERURL = "";
 
     //判断是否是测试
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public static final String SharedPreferencesKey = "LJW";
 
