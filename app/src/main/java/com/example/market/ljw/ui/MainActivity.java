@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.AppContext;
@@ -63,6 +64,9 @@ public class MainActivity extends BaseActivity {
     private boolean isCanAddscore = true;
     //倒计时工具类
     private MiaoshaUtil localMiaoShaUtil;
+    //提交请求间隔
+    private MiaoshaUtil getServierShaUtil;
+
     Handler refhandler = new Handler() {//积分获取后改变的ui线程
         @Override
         public void handleMessage(Message msg) {
@@ -86,8 +90,6 @@ public class MainActivity extends BaseActivity {
 
         AppListFragment.AppListFragmentTM appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
         ApplicationManager.go(appListFragmentTM);
-
-
         getMemberInfo();//开始
     }
 
@@ -108,8 +110,10 @@ public class MainActivity extends BaseActivity {
         unbindService(sconnection);
         super.onDestroy();
         isRunning = false;//结束积分线程
-        if (localMiaoShaUtil != null)
+        if (localMiaoShaUtil != null){
+            getServierShaUtil.countdownCancel();
             localMiaoShaUtil.countdownCancel();
+        }
         Utils.showSystem("onDestroy", isRunning + "");
     }
 
@@ -158,6 +162,8 @@ public class MainActivity extends BaseActivity {
         intervalTime = Long.valueOf(member.getClientSubmitInterval());//心跳时间
         isCanAddscore = Utils.isCanAddScore(member.getServerTime());//判断服务器时间能够增长积分
         localMiaoShaUtil = new MiaoshaUtil();//倒计时
+        getServierShaUtil = new MiaoshaUtil();
+        getServierShaUtil.setmCountdownInterval(delayMillis*10L);
         initViewData();
         if (isCanAddscore) {
             startTimeNum();
@@ -225,41 +231,37 @@ public class MainActivity extends BaseActivity {
      * 初始化数据，开启提交积分线程
      */
     private void initData() {
-        new Thread(new Runnable() {
+        getServierShaUtil.setCountdown(0,System.currentTimeMillis() + Constant.ENDTIME,new MiaoshaUtil.CountDownListener() {
             @Override
-            public void run() {
-                //设置该线程的优先等级为最高
-                Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-                while (isRunning) {//提交数据循环
-                    try {
-                        sleep(delayMillis*10);//心跳时间
-                        Utils.showSystem("gyh server",member.getServerTime());
-                        if (!Utils.isNetworkConnected(MainActivity.this)) {//判断是否有网络
-                            //没有网络的时候,修改服务器时间
-                            member.setServerTime(UtilsServer.modifyServerTime(member.getServerTime(),10));
-                            isCanAddscore = Utils.isCanAddScore(member.getServerTime());
-                            if (!isCanAddscore && localMiaoShaUtil != null) {
-                                localMiaoShaUtil.countdownCancel();
-                                member.setDuration(0);
-                                member.setTodayScore(0);
-                                refhandler.sendEmptyMessage(1);
-                            } else if (isCanAddscore && member.getDuration() == 0) {
-                                startTimeNum();
-                            }
-                        } else {
-                            //有网络的时候
-                            if (mRequetTimeInFuture == 0) {
-                                setDataToService();
-                            } else if ((member.getDuration() - mRequetTimeInFuture) >= intervalTime/2 || member.getDuration() - mRequetTimeInFuture<=0) {
-                                setDataToService();
-                            }
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+            public void changed(MyCountdownTimer paramMyCountdownTimer, long residueTime, long[] threeTimePoint, int what) {
+                Utils.showSystem("gyh server",member.getServerTime());
+                if (!Utils.isNetworkConnected(MainActivity.this)) {//判断是否有网络
+                    //没有网络的时候,修改服务器时间
+                    member.setServerTime(UtilsServer.modifyServerTime(member.getServerTime(),10));
+                    isCanAddscore = Utils.isCanAddScore(member.getServerTime());
+                    if (!isCanAddscore && localMiaoShaUtil != null) {
+                        localMiaoShaUtil.countdownCancel();
+                        member.setDuration(0);
+                        member.setTodayScore(0);
+                        refhandler.sendEmptyMessage(1);
+                    } else if (isCanAddscore && member.getDuration() == 0) {
+                        startTimeNum();
+                    }
+                } else {
+                    //有网络的时候
+                    if (mRequetTimeInFuture == 0) {
+                        setDataToService();
+                    } else if ((member.getDuration() - mRequetTimeInFuture) >= intervalTime/2 || member.getDuration() - mRequetTimeInFuture<=0) {
+                        setDataToService();
                     }
                 }
             }
-        }).start();
+
+            @Override
+            public boolean finish(MyCountdownTimer paramMyCountdownTimer, long endRemainTime, int what) {
+                return false;
+            }
+        });
     }
 
     /**
