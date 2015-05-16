@@ -38,6 +38,8 @@ public class HttpSetting implements HttpSettingParams {
     //需要返回的Type
     private Type currentType;
 	private boolean isReady;
+    //是否是安全连接
+    private boolean isSafe;
 
     public Type getCurrentType() {
         return currentType;
@@ -173,7 +175,15 @@ public class HttpSetting implements HttpSettingParams {
 			}
 	}
 
-	public void setListener(HttpGroup.HttpTaskListener httptasklistener) {
+    public boolean isSafe() {
+        return isSafe;
+    }
+
+    public void setSafe(boolean isSafe) {
+        this.isSafe = isSafe;
+    }
+
+    public void setListener(HttpGroup.HttpTaskListener httptasklistener) {
 		if (httptasklistener instanceof HttpGroup.OnErrorListener)
 			onErrorListener = (HttpGroup.OnErrorListener) httptasklistener;
 		if (httptasklistener instanceof HttpGroup.OnStartListener)

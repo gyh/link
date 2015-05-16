@@ -147,6 +147,17 @@ public class Utils {
     }
 
     /**
+     * 在最近运行的应用列表中取出
+     * */
+    public static void  killLjwApp(Context context,String pkg){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        final int apiLevel = Build.VERSION.SDK_INT;
+        if (apiLevel >= 8) {
+            activityManager.killBackgroundProcesses(pkg);
+        }
+    }
+
+    /**
      * 获取连接网appIntent
      * */
     public static Intent getLJWAppIntent(Context context){
@@ -292,7 +303,11 @@ public class Utils {
      * 判断是否能够加积分
      * 2015-03-13T15:11:28.6076968+08:00
      * */
-    public static boolean isCanAddScore(String timeStr){
+    public static boolean isCanAddScore(String timeStr,Context context){
+        //判断是有网络
+        if(!isNetworkConnected(context)){
+            timeStr = getCurrentDate();
+        }
        int serverhour = 0;
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         try {
@@ -443,6 +458,13 @@ public class Utils {
             System.out.println("gyh--"+key+"--" + context);
         }
     }
+    /**
+     * 将数据写到sd卡中
+     * */
+    public static void setFileLog(String context,FileService fileService){
+        fileService.saveToSDCard(context);
+    }
+
     public static String getVersionName(Activity activity) throws Exception{
         // 获取packagemanager的实例
         PackageManager packageManager = activity.getPackageManager();

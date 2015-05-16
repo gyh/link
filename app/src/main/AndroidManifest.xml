@@ -17,6 +17,11 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
         android:name="com.example.market.ljw.core.common.frame.AppContext"
@@ -45,6 +50,10 @@
         <meta-data android:name="BaiduMobAd_GPS_LOCATION" android:value="true" />
         <!-- 是否获取WIFI位置信息，默认为true -->
         <meta-data android:name="BaiduMobAd_WIFI_LOCATION" android:value="true" />
+
+        <activity android:name=".ui.TestActivity">
+
+        </activity>
 
         <activity
             android:name=".ui.WelcomeActivity"

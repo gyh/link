@@ -41,7 +41,10 @@ public class Constant {
     //最后等待时间
     public static int theNextLen = 600;
     public static final int theWaitTime = 600;
-
+    //定义一秒
+    public final long delayMillis = 1000;
+    //定义的心跳
+    public static long intervalTime = 10;
     //本地记录用户信息
     public static Member member = null;
     //记录广告图片
@@ -55,6 +58,7 @@ public class Constant {
 
     public final static long ENDTIME = 365*24*60*60*1000;
 
+    //判断是否显示锁屏界面
     public static boolean isShowLock = true;
 
     public final static String baiduAppkey = "12bf738d12";

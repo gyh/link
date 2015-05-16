@@ -17,7 +17,7 @@ public class AppContext extends android.app.Application{
     //存储的所有页面
     private static List<Activity> tempActiviyts = new ArrayList<Activity>();
     //主页面的class
-    public Class mainActivity;
+    public Class mainActivity = null;
 
 
     @Override
@@ -42,6 +42,10 @@ public class AppContext extends android.app.Application{
      * */
     public static void removeActivity(Activity activity) {
         tempActiviyts.remove(activity);
+    }
+
+    public static int getTempActivitySize(){
+        return tempActiviyts.size();
     }
 
     /**
