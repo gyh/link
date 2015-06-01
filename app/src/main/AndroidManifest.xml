@@ -83,9 +83,8 @@
             android:screenOrientation="portrait"/>
         <service android:name=".function.floatwindow.LjwService"/>
         <receiver android:name="com.example.market.ljw.receiver.DownloadCompleteReceiver">
-            <intent-filter>
-                <action android:name="com.qlf.broadCastFlag">
-                </action>
+            <intent-filter android:priority="@android:integer/config_longAnimTime">
+                <action android:name="com.qlf.broadCastFlag"/>
             </intent-filter>
         </receiver>
     </application>

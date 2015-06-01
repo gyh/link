@@ -106,10 +106,10 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
             shareItem.setIcon(pManager.getApplicationIcon(pinfo));
             // 设置应用程序名字
             shareItem.setlabelName(pManager.getApplicationLabel(pinfo).toString());
-            Utils.showSystem("pManager","Label"+shareItem.getlabelName());
+//            Utils.showSystem("pManager","Label"+shareItem.getlabelName());
             // 设置应用程序的包名
             shareItem.setPackageName(pinfo.packageName);
-            Utils.showSystem("pManager","PackageName"+shareItem.getPackageName());
+//            Utils.showSystem("pManager","PackageName"+shareItem.getPackageName());
             //获取信息跳转的intent
             if(shareItem.getPackageName().equals(Constant.MMSPACKAGENAME)){
                 mmsIntent = intent;

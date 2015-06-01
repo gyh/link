@@ -34,7 +34,7 @@ public class Constant {
     public static String REGISTERURL = "";
 
     //判断是否是测试
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public static final String SharedPreferencesKey = "LJW";
 
@@ -42,7 +42,7 @@ public class Constant {
     public static int theNextLen = 600;
     public static final int theWaitTime = 600;
     //定义一秒
-    public final long delayMillis = 1000;
+    public  static final long delayMillis = 1000;
     //定义的心跳
     public static long intervalTime = 10;
     //本地记录用户信息

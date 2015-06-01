@@ -71,10 +71,13 @@ public class MainActivity extends BaseActivity {
     private boolean isHasStop = false;
     //判断是否是第一次开始
     private boolean isHasFirstStart = true;
+    //主线程
+    private boolean isMainRun = true;
     //能够挂积分
     private static final int START_RHANGING_POINTS = 0;
     private static final int STOP_RHANGING_POINTS = 1;
     private static final int RESTART_RHANGING_POINTS = 2;
+    private static final int NO_RHANGING_POINTS = 3;
     //积分获取后改变的ui线程
     Handler refhandler = new Handler() {
         @Override
@@ -135,8 +138,8 @@ public class MainActivity extends BaseActivity {
         if (localMiaoShaUtil != null) {
             localMiaoShaUtil.countdownCancel();
         }
+        isMainRun = false;
         AppContext.getInstance().setMainActivity(null);
-        Utils.showSystem("maintivity onDestroy current", AppContext.getInstance().getMainActivity() + "");
     }
 
     /**
@@ -194,6 +197,7 @@ public class MainActivity extends BaseActivity {
      * 获取数据成功后初始化流程
      */
     private void initLJWPrcoss() {
+        isMainRun = true;
         isHasFirstStart = true;
         Constant.intervalTime = Long.valueOf(Constant.member.getClientSubmitInterval());//心跳时间
         localMiaoShaUtil = new MiaoshaUtil();//倒计时
@@ -223,10 +227,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void mainThread() {
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+                while (isMainRun) {
                     //判断是否能够挂积分了
                     if (Utils.isCanAddScore(Constant.member.getServerTime(), MainActivity.this)&&isHasFirstStart) {
                         refhandler.sendEmptyMessage(START_RHANGING_POINTS);
@@ -275,15 +281,15 @@ public class MainActivity extends BaseActivity {
                 //需要解决的问题是怎么怎么计算剩余时间
                 long duration = (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000;
                 Constant.member.setDuration(duration);
-                Utils.showSystem("changed", "" + (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
-                refhandler.sendEmptyMessage(1);
+//                Utils.showSystem("changed", "" + (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
+                refhandler.sendEmptyMessage(NO_RHANGING_POINTS);
             }
 
             @Override
             public boolean finish(MyCountdownTimer paramMyCountdownTimer, long endRemainTime, int what) {
                 Constant.member.setDuration(0);
                 Constant.member.setTodayScore(0);
-                refhandler.sendEmptyMessage(1);
+                refhandler.sendEmptyMessage(NO_RHANGING_POINTS);
                 return false;
             }
         });
@@ -324,6 +330,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(View view) {
                                 dialogBuilder.dismiss();
+                                isMainRun = false;
                                 AppContext.clearActivitys();
                             }
                         });

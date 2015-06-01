@@ -63,10 +63,10 @@ public class MarketListFragment extends MyActivity implements AdapterView.OnItem
         appsItemInfos.add(appsItemInfo1);
 
         AppsItemInfo appsItemInfoJiaMeng = new AppsItemInfo();
-        appsItemInfoJiaMeng.setIcon(getActivity().getResources().getDrawable(R.drawable.icon_my_account));
+        appsItemInfoJiaMeng.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_company));
         appsItemInfoJiaMeng.setlabelName("加盟企业");
-        urlList.add(Constant.LJWBASE_URL+"MemberCompanyList.aspx?" +
-                "token="+AppContext.getInstance().getBaseActivity()
+        urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberCompanyList.aspx" +
+                "&token="+AppContext.getInstance().getBaseActivity()
                 .getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
         appsItemInfos.add(appsItemInfoJiaMeng);
 

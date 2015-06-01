@@ -15,6 +15,8 @@ import com.example.market.ljw.core.common.http.HttpGroup;
 import com.example.market.ljw.core.common.http.HttpGroupSetting;
 import com.example.market.ljw.core.common.http.HttpResponse;
 import com.example.market.ljw.core.common.http.HttpSetting;
+import com.example.market.ljw.core.utils.MiaoshaUtil;
+import com.example.market.ljw.core.utils.MyCountdownTimer;
 import com.example.market.ljw.core.utils.Util;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.MemberOutput;
@@ -36,8 +38,7 @@ public class LjwService extends Service implements View.OnClickListener {
     //跳转锁屏界面intent
     private Intent lockIntent;
     private boolean isShowView = false;
-    private boolean isrunning = false;
-
+    private MiaoshaUtil serviceMiaoshaUtil;
     //链接网服务数据请求
     private LjwServiceData ljwServiceData;
     //跳转到主页
@@ -92,7 +93,6 @@ public class LjwService extends Service implements View.OnClickListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        isrunning = true;
         //创建浮动窗口
         MyWindowManager.createSmallWindow(getApplicationContext());
         //初始化锁屏界面跳转intent
@@ -121,7 +121,7 @@ public class LjwService extends Service implements View.OnClickListener {
         //log
         Utils.showSystem("service ","destroy");
         //结束服务线程
-        isrunning = false;
+        serviceMiaoshaUtil.countdownCancel();
         //隐藏浮动窗口
         MyWindowManager.hiddenSmallWindow();
         //注销锁屏广播
@@ -138,7 +138,7 @@ public class LjwService extends Service implements View.OnClickListener {
             if (AppContext.getInstance().getBaseActivity() != null) {
                 ljwServicehandler.sendEmptyMessage(GO_MAIN);
             } else {
-                isrunning = false;
+                serviceMiaoshaUtil.countdownCancel();
                 LjwService.this.stopSelf();
             }
         }
@@ -161,25 +161,27 @@ public class LjwService extends Service implements View.OnClickListener {
      * 初始化服务现场
      */
     private void initLjwServiceThread() {
-        new Thread(new Runnable() {
+        serviceMiaoshaUtil = new MiaoshaUtil();
+        serviceMiaoshaUtil.setCountdown(0, System.currentTimeMillis() + Constant.ENDTIME, new MiaoshaUtil.CountDownListener() {
             @Override
-            public void run() {
-                while (isrunning) {
-                    try {
-                        Thread.sleep(1000);
-                        //判断如果列表为空
-                        if(AppContext.getTempActivitySize()==0 || AppContext.getInstance().getMainActivity() == null){
-                            ljwServicehandler.sendEmptyMessage(HIDDEN_SMALLWINDOW);
-                            continue;
-                        }
-                        setClockhandler();
-                        ljwServiceData.setServiceDataRequest();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            public void changed(MyCountdownTimer paramMyCountdownTimer, long residueTime, long[] threeTimePoint, int what) {
+                //获取现在的挂机时间
+                //threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000 == 剩余时间
+                //需要解决的问题是怎么怎么计算剩余时间
+                long duration = (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000;
+                if(AppContext.getTempActivitySize()==0 || AppContext.getInstance().getMainActivity() == null){
+                    ljwServicehandler.sendEmptyMessage(HIDDEN_SMALLWINDOW);
+                    return;
                 }
+                setClockhandler();
+                ljwServiceData.setServiceDataRequest();
             }
-        }).start();
+
+            @Override
+            public boolean finish(MyCountdownTimer paramMyCountdownTimer, long endRemainTime, int what) {
+                return false;
+            }
+        });
     }
 
     /**
@@ -211,15 +213,19 @@ public class LjwService extends Service implements View.OnClickListener {
     class LjwServiceData{
 
         //记录上一次提交时间
-        long mRequetTimeInFuture = 0;
+        String  mRequetTimeInFuture = Utils.getCurrentDate();
         /**
          * 设置服务器请求
+         * 记录上次请求时间
+         * 判断这次循环是否需要请求
          * */
         public void setServiceDataRequest(){
-            if (mRequetTimeInFuture == 0) {
-                setDataToService();
-            } else if ((Constant.member.getDuration() - mRequetTimeInFuture) >= Constant.intervalTime ||
-                    Constant.member.getDuration() - mRequetTimeInFuture<=0) {
+            //没有网络的情况不需要请求
+            if(!Utils.isNetworkConnected(LjwService.this)){
+                return;
+            }
+            //判断是么时候能够请求 （判断请求间隔）
+            if (Utils.CalculationInterval(mRequetTimeInFuture,Utils.getCurrentDate())>= Constant.intervalTime) {
                 setDataToService();
             }
         }
@@ -231,7 +237,7 @@ public class LjwService extends Service implements View.OnClickListener {
                 return;
             }
             //设置请求数据时间
-            mRequetTimeInFuture = Constant.member.getDuration();
+            mRequetTimeInFuture = Utils.getCurrentDate();
             //准备提交数据
             Map<String, Object> param = new LinkedHashMap<String, Object>();
             param.put(Constant.RequestKeys.SERVICENAME, "submit_score");

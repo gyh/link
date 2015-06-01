@@ -40,7 +40,7 @@ public class DateUtils {
         delayMillis = delayMillis%60;
         long M = delayMillis;
         String houre = "";
-        Utils.showSystem("setCurTimeToView","时间是："+N+"小时 "+K+"分钟 "+M+"秒");
+//        Utils.showSystem("setCurTimeToView","时间是："+N+"小时 "+K+"分钟 "+M+"秒");
         if(N<=9){
             houre = "0"+N;
         }else {

@@ -133,7 +133,7 @@ public class Utils {
                 }
             }
         }
-        Utils.showSystem("packagename",appTask.get(0).baseIntent.getComponent().getPackageName());
+//        Utils.showSystem("packagename",appTask.get(0).baseIntent.getComponent().getPackageName());
         appTask.clear();
         return isShow;
     }
@@ -332,6 +332,24 @@ public class Utils {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String strt = df.format(new Date());
         return strt;
+    }
+
+    /**
+     * 计算时间间隔
+     * */
+    public static long CalculationInterval(String startTime,String endTime){
+        long between = 0;
+        try {
+            SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date begin;
+            Date end;
+            begin = dfs.parse(startTime);
+            end = dfs.parse(endTime);
+            between = (end.getTime() - begin.getTime())/1000;// 得到两者的毫秒数
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return between;
     }
 
     /**
