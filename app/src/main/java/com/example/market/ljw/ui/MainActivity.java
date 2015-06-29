@@ -2,10 +2,10 @@ package com.example.market.ljw.ui;
 
 
 import android.app.ActivityManager;
-import android.content.ComponentName;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.*;
 import android.os.Process;
@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.AppContext;
@@ -24,14 +23,11 @@ import com.example.market.ljw.core.common.http.HttpGroup;
 import com.example.market.ljw.core.common.http.HttpResponse;
 import com.example.market.ljw.core.utils.Constant;
 import com.example.market.ljw.core.utils.DateUtils;
-import com.example.market.ljw.core.utils.FileService;
 import com.example.market.ljw.core.utils.MiaoshaUtil;
 import com.example.market.ljw.core.utils.MyCountdownTimer;
 import com.example.market.ljw.core.utils.PopUtils;
 import com.example.market.ljw.core.utils.PromptUtil;
-import com.example.market.ljw.core.utils.Util;
 import com.example.market.ljw.core.utils.Utils;
-import com.example.market.ljw.core.utils.UtilsServer;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.Member;
 import com.example.market.ljw.entity.bean.output.MemberOutput;
@@ -40,7 +36,6 @@ import com.example.market.ljw.fragment.CarouselFragment;
 import com.example.market.ljw.fragment.MarketListFragment;
 import com.example.market.ljw.fragment.WebViewFragment;
 import com.example.market.ljw.function.floatwindow.LjwService;
-import com.example.market.ljw.function.floatwindow.ServiceInterface;
 import com.example.market.ljw.service.InputDataUtils;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -49,7 +44,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static java.lang.Thread.MAX_PRIORITY;
 import static java.lang.Thread.sleep;
 
 
@@ -78,6 +72,8 @@ public class MainActivity extends BaseActivity {
     private static final int STOP_RHANGING_POINTS = 1;
     private static final int RESTART_RHANGING_POINTS = 2;
     private static final int NO_RHANGING_POINTS = 3;
+    //微信登录后接受广播
+    private PreventReceiveBroadCast preventReceiveBroadCast;
     //积分获取后改变的ui线程
     Handler refhandler = new Handler() {
         @Override
@@ -108,14 +104,21 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_ljw);
         //清除碎片栈
         ApplicationManager.clearBackStack();
+        //定义广播
+        preventReceiveBroadCast = new PreventReceiveBroadCast();
+        IntentFilter filter = new IntentFilter(); //只有持有相同的action的接受者才能接收此广播
+        filter.addAction(Constant.ReceiveBroadCastKey.PREVENTBROAD_FLAG);
+        registerReceiver(preventReceiveBroadCast, filter);
 
+        //设置main
         AppContext.getInstance().setMainActivity(this.getClass());
+        //初始化视图
         initView();
         getMemberInfo();//开始
         //添加广告图片
         CarouselFragment carouselFragment = new CarouselFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
-
+        //列表
         AppListFragment.AppListFragmentTM appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
         ApplicationManager.go(appListFragmentTM);
     }
@@ -137,6 +140,9 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
         if (localMiaoShaUtil != null) {
             localMiaoShaUtil.countdownCancel();
+        }
+        if(preventReceiveBroadCast !=null){
+            unregisterReceiver(preventReceiveBroadCast); //注销此广播
         }
         isMainRun = false;
         AppContext.getInstance().setMainActivity(null);
@@ -199,7 +205,12 @@ public class MainActivity extends BaseActivity {
     private void initLJWPrcoss() {
         isMainRun = true;
         isHasFirstStart = true;
-        Constant.intervalTime = Long.valueOf(Constant.member.getClientSubmitInterval());//心跳时间
+        try {
+            Constant.intervalTime = Long.valueOf(Constant.member.getClientSubmitInterval());//心跳时间
+        }catch (Exception e){
+            startActivity(new Intent(this,WelcomeActivity.class));
+            this.finish();
+        }
         localMiaoShaUtil = new MiaoshaUtil();//倒计时
         initViewData();
         mainThread();
@@ -343,5 +354,15 @@ public class MainActivity extends BaseActivity {
             }
         }
         return false;
+    }
+
+    /**
+     * 注册广播，防止销毁
+     */
+    class PreventReceiveBroadCast extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent){
+
+        }
     }
 }

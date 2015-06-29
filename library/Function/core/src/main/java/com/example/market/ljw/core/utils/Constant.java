@@ -34,7 +34,7 @@ public class Constant {
     public static String REGISTERURL = "";
 
     //判断是否是测试
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
     public static final String SharedPreferencesKey = "LJW";
 
@@ -144,6 +144,11 @@ public class Constant {
     }
     public static class ShowPackName{
         public static String ANDROID_HOME="com.sec.android.app.launcher";
+    }
+
+    public static class ReceiveBroadCastKey{
+        //main防止销毁广播接受key
+        public static final String PREVENTBROAD_FLAG = "fangzhixiaohuiflag";
     }
 
 }

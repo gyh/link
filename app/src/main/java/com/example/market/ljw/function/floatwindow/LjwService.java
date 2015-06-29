@@ -169,11 +169,19 @@ public class LjwService extends Service implements View.OnClickListener {
                 //threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000 == 剩余时间
                 //需要解决的问题是怎么怎么计算剩余时间
                 long duration = (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000;
+
+                Intent intent = new Intent();  //Itent就是我们要发送的内容
+                //设置你这个广播的action，只有和这个action一样的接受者才能接受者才能接收广播
+                intent.setAction(Constant.ReceiveBroadCastKey.PREVENTBROAD_FLAG);
+                sendBroadcast(intent);//发送广播
+                //判断是被回收
                 if(AppContext.getTempActivitySize()==0 || AppContext.getInstance().getMainActivity() == null){
                     ljwServicehandler.sendEmptyMessage(HIDDEN_SMALLWINDOW);
                     return;
                 }
+                //设置桌面图标展示数据
                 setClockhandler();
+                //设置服务器请求
                 ljwServiceData.setServiceDataRequest();
             }
 

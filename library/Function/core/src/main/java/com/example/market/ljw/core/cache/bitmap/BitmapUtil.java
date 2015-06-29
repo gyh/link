@@ -40,16 +40,9 @@ public class BitmapUtil {
 	private static final int BUFFER_SIZE = 64 * 1024;
 
 	public Bitmap decodeFile(File f, int width, int height) {
-		updateLastModifiedForCache(f);
-		int suggestedSize = height;
-		if (width > height) {
-			suggestedSize = width;
-		}
-		Bitmap unscaledBitmap = decodeFile(f, suggestedSize);
-		if (unscaledBitmap == null) {
-			return null;
-		}
-		return unscaledBitmap;
+        updateLastModifiedForCache(f);
+        int suggestedSize = width > height ? width : height;
+        return decodeFile(f, suggestedSize);
 	}
 
 	public Bitmap decodeFileAndScale(File paramFile, int width,
