@@ -2,6 +2,7 @@ package com.example.market.ljw.function.floatwindow;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -9,9 +10,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.example.market.ljw.core.utils.Utils;
 import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.utils.Constant;
+import com.example.market.ljw.ui.RegisterActivity;
+import com.example.market.ljw.ui.TempActivity;
 
 import java.lang.reflect.Field;
 
@@ -22,7 +26,7 @@ public class FloatWindowSmallView extends LinearLayout {
     /**
      *
      * */
-    public static final int ErrorValue = 5;
+    public static final int ErrorValue = 10;
 
     /**
      * 记录小悬浮窗的宽度
@@ -110,7 +114,9 @@ public class FloatWindowSmallView extends LinearLayout {
                 break;
             case MotionEvent.ACTION_UP:
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
+                Utils.showSystem("ACTION_UP",Utils.getCurrentDate());
                 if (Math.abs(xDownInScreen - xInScreen) < ErrorValue && Math.abs(yDownInScreen - yInScreen) < ErrorValue) {
+                    Utils.showSystem("ACTION_UP2",Utils.getCurrentDate());
                     openBigWindow();
                 } else {
                     //判断最后滑动的区域
@@ -157,11 +163,21 @@ public class FloatWindowSmallView extends LinearLayout {
     private void openBigWindow() {
 //        MyWindowManager.createBigWindow(getContext());
 //        MyWindowManager.removeSmallWindow(getContext());
-        Constant.makeAppName = Constant.PACKAGENAME;
-        Intent it = new Intent(getContext(), MainActivity.class);
-        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        it.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
-        getContext().startActivity(it);
+        Utils.showSystem("startTime",Utils.getCurrentDate());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                Constant.makeAppName = Constant.PACKAGENAME;
+                Intent intent2 = new Intent(getContext(),MainActivity.class);
+//                Intent intent2 = Utils.getLJWAppIntent2(getContext());
+                intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent2.putExtra(Constant.FromWhere.KEY, Constant.FromWhere.FXSERVICE);
+                getContext().startActivity(intent2);
+                Utils.showSystem("startTime2",Utils.getCurrentDate());
+            }
+        }, 10);
     }
 
     /**

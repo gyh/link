@@ -26,7 +26,7 @@ public class PromptUtil {
      * 弹出提示信息
      * @param msg 提示信息内容
      */
-    public static void showMessage(BaseActivity baseActivity,String msg){
+    public static void showMessage(Context baseActivity,String msg){
         Toast.makeText(baseActivity, msg, Toast.LENGTH_SHORT).show();
     }
 

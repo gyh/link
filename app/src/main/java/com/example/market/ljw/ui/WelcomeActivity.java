@@ -62,6 +62,9 @@ public class WelcomeActivity extends BaseActivity implements CheckUpdateListener
     protected void onResume() {
         super.onResume();
         registerReceiver(downloadCompleteReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        if(AppContext.getTempActivitySize()!=0 && AppContext.getInstance().getMainActivity() != null){
+            finish();
+        }
     }
 
     @Override
@@ -71,6 +74,7 @@ public class WelcomeActivity extends BaseActivity implements CheckUpdateListener
             unregisterReceiver(downloadCompleteReceiver);
         }
     }
+
 
     /**
      * 检查手机是否是小米手机
@@ -106,6 +110,9 @@ public class WelcomeActivity extends BaseActivity implements CheckUpdateListener
             Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        if(AppContext.getTempActivitySize()!=0 && AppContext.getInstance().getMainActivity() != null){
+            return;
         }
         Intent intent = new Intent();
         intent.setClass(WelcomeActivity.this, LoginActivity.class);

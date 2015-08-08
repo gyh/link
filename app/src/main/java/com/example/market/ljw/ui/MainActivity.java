@@ -27,6 +27,7 @@ import com.example.market.ljw.core.utils.MiaoshaUtil;
 import com.example.market.ljw.core.utils.MyCountdownTimer;
 import com.example.market.ljw.core.utils.PopUtils;
 import com.example.market.ljw.core.utils.PromptUtil;
+import com.example.market.ljw.core.utils.Util;
 import com.example.market.ljw.core.utils.Utils;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.Member;
@@ -74,11 +75,14 @@ public class MainActivity extends BaseActivity {
     private static final int NO_RHANGING_POINTS = 3;
     //微信登录后接受广播
     private PreventReceiveBroadCast preventReceiveBroadCast;
+    private CarouselFragment.CarouselFragmentTM carouselFragmentTM;
+    private AppListFragment.AppListFragmentTM appListFragmentTM;
+
     //积分获取后改变的ui线程
     Handler refhandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case START_RHANGING_POINTS:
                     startTimeNum();
                     break;
@@ -116,16 +120,19 @@ public class MainActivity extends BaseActivity {
         initView();
         getMemberInfo();//开始
         //添加广告图片
-        CarouselFragment carouselFragment = new CarouselFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.carouselfragment, carouselFragment).commit();
+        Utils.showSystem("onCreateTime",Utils.getCurrentDate());
+        carouselFragmentTM = new CarouselFragment.CarouselFragmentTM(R.id.carouselfragment);
+        ApplicationManager.simpleGo(carouselFragmentTM);
         //列表
-        AppListFragment.AppListFragmentTM appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
+        appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
         ApplicationManager.go(appListFragmentTM);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Utils.showSystem("onResumeTime",Utils.getCurrentDate());
         Constant.theNextLen = Constant.theWaitTime;//重置倒计时时间
         Constant.makeAppName = Constant.PACKAGENAME;
     }
@@ -141,7 +148,7 @@ public class MainActivity extends BaseActivity {
         if (localMiaoShaUtil != null) {
             localMiaoShaUtil.countdownCancel();
         }
-        if(preventReceiveBroadCast !=null){
+        if (preventReceiveBroadCast != null) {
             unregisterReceiver(preventReceiveBroadCast); //注销此广播
         }
         isMainRun = false;
@@ -207,8 +214,8 @@ public class MainActivity extends BaseActivity {
         isHasFirstStart = true;
         try {
             Constant.intervalTime = Long.valueOf(Constant.member.getClientSubmitInterval());//心跳时间
-        }catch (Exception e){
-            startActivity(new Intent(this,WelcomeActivity.class));
+        } catch (Exception e) {
+            startActivity(new Intent(this, WelcomeActivity.class));
             this.finish();
         }
         localMiaoShaUtil = new MiaoshaUtil();//倒计时
@@ -245,14 +252,14 @@ public class MainActivity extends BaseActivity {
                 android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
                 while (isMainRun) {
                     //判断是否能够挂积分了
-                    if (Utils.isCanAddScore(Constant.member.getServerTime(), MainActivity.this)&&isHasFirstStart) {
+                    if (Utils.isCanAddScore(Constant.member.getServerTime(), MainActivity.this) && isHasFirstStart) {
                         refhandler.sendEmptyMessage(START_RHANGING_POINTS);
                         isHasFirstStart = false;
                         isHasStop = false;
-                    } else if(Utils.isCanAddScore(Constant.member.getServerTime(), MainActivity.this)&&isHasStop){
+                    } else if (Utils.isCanAddScore(Constant.member.getServerTime(), MainActivity.this) && isHasStop) {
                         refhandler.sendEmptyMessage(RESTART_RHANGING_POINTS);
                         isHasStop = false;
-                    }else if(!Utils.isCanAddScore(Constant.member.getServerTime(), MainActivity.this)&&!isHasStop){
+                    } else if (!Utils.isCanAddScore(Constant.member.getServerTime(), MainActivity.this) && !isHasStop) {
                         isHasStop = true;
                         refhandler.sendEmptyMessage(STOP_RHANGING_POINTS);
                     }
@@ -287,12 +294,8 @@ public class MainActivity extends BaseActivity {
         localMiaoShaUtil.setCountdown(Constant.member.getDuration() * 1000, System.currentTimeMillis() + Constant.ENDTIME, new MiaoshaUtil.CountDownListener() {
             @Override
             public void changed(MyCountdownTimer paramMyCountdownTimer, long residueTime, long[] threeTimePoint, int what) {
-                //获取现在的挂机时间
-                //threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000 == 剩余时间
-                //需要解决的问题是怎么怎么计算剩余时间
                 long duration = (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000;
                 Constant.member.setDuration(duration);
-//                Utils.showSystem("changed", "" + (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000);
                 refhandler.sendEmptyMessage(NO_RHANGING_POINTS);
             }
 
@@ -361,7 +364,7 @@ public class MainActivity extends BaseActivity {
      */
     class PreventReceiveBroadCast extends BroadcastReceiver {
         @Override
-        public void onReceive(Context context, Intent intent){
+        public void onReceive(Context context, Intent intent) {
 
         }
     }

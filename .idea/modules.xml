@@ -8,8 +8,10 @@
       <module fileurl="file://$PROJECT_DIR$/library/Function/core/core.iml" filepath="$PROJECT_DIR$/library/Function/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/Function/db/db.iml" filepath="$PROJECT_DIR$/library/Function/db/db.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/Function/entity/entity.iml" filepath="$PROJECT_DIR$/library/Function/entity/entity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/Function/function.iml" filepath="$PROJECT_DIR$/library/Function/function.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/service/lock/lock.iml" filepath="$PROJECT_DIR$/library/service/lock/lock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/service/service.iml" filepath="$PROJECT_DIR$/library/service/service.iml" />
     </modules>
   </component>
 </project>
-

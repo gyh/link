@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.view.View;
 
 import com.example.market.ljw.core.common.http.HttpGroup;
@@ -20,6 +21,7 @@ import com.example.market.ljw.core.utils.MyCountdownTimer;
 import com.example.market.ljw.core.utils.Util;
 import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.MemberOutput;
+import com.example.market.ljw.receiver.ScreenBCReceiver;
 import com.example.market.ljw.service.InputDataUtils;
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.AppContext;
@@ -31,12 +33,14 @@ import com.google.gson.Gson;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class LjwService extends Service implements View.OnClickListener {
+public class LjwService extends Service{
     //锁屏管理
     private KeyguardManager keyguardManager = null;
     private KeyguardManager.KeyguardLock keyguardLock = null;
     //跳转锁屏界面intent
     private Intent lockIntent;
+    //防止页面锁屏
+    private Intent intentNoset;
     private boolean isShowView = false;
     private MiaoshaUtil serviceMiaoshaUtil;
     //链接网服务数据请求
@@ -47,7 +51,9 @@ public class LjwService extends Service implements View.OnClickListener {
     private static final int HIDDEN_SMALLWINDOW = 1;
     //显示小图标
     private static final int SHOW_SMALLWINDOW = 2;
-    //
+    //广播
+    private ScreenBCReceiver mScreenBCR;
+
     Handler ljwServicehandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -60,35 +66,17 @@ public class LjwService extends Service implements View.OnClickListener {
                     MyWindowManager.hiddenSmallWindow();
                     break;
                 case SHOW_SMALLWINDOW:
-                    Constant.theNextLen = Constant.theNextLen - 1;
+                    PowerManager pm = (PowerManager) LjwService.this.getSystemService(Context.POWER_SERVICE);
+                    boolean isScreenOn = pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
+                    if(isScreenOn){
+                        Constant.theNextLen = Constant.theNextLen - 1;
+                    }
                     MyWindowManager.showSmallWindow();
                     break;
             }
         }
     };
 
-    /**
-     * 锁频广播监听
-     */
-    private BroadcastReceiver mScreenBCR = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //判断如果列表为空
-            if(AppContext.getTempActivitySize()==0 || AppContext.getInstance().getMainActivity() == null){
-                ljwServicehandler.sendEmptyMessage(HIDDEN_SMALLWINDOW);
-                return;
-            }
-            if (Constant.isShowLock &&
-                    !Utils.getFirstTask(LjwService.this).equals(Constant.PHONEPACKAGENAME) &&
-                    (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)
-                            || intent.getAction().equals(Intent.ACTION_SCREEN_ON))) {
-                Constant.isShowLock = false;
-                Constant.TimeSystemCal.TEMPTIMESYSTEM = Utils.getCurrentDate();
-                keyguardLock.disableKeyguard(); //这里就是取消系统默认的锁屏
-                startActivity(lockIntent); //注意这里跳转的意图
-            }
-        }
-    };
 
     @Override
     public void onCreate() {
@@ -98,13 +86,21 @@ public class LjwService extends Service implements View.OnClickListener {
         //初始化锁屏界面跳转intent
         lockIntent = new Intent(LjwService.this, LockActivity.class);
         lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        //防止锁屏
+        intentNoset = new Intent();  //Itent就是我们要发送的内容
+        //设置你这个广播的action，只有和这个action一样的接受者才能接受者才能接收广播
+        intentNoset.setAction(Constant.ReceiveBroadCastKey.PREVENTBROAD_FLAG);
         //链接网积分请求
         ljwServiceData = new LjwServiceData();
         //创建锁屏对象
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         keyguardLock = keyguardManager.newKeyguardLock("");
         //注册锁屏广播
-        IntentFilter mScreenOffFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+        IntentFilter mScreenOffFilter = new IntentFilter();
+        mScreenOffFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        mScreenOffFilter.addAction(Intent.ACTION_SCREEN_ON);
+        mScreenBCR = new ScreenBCReceiver();
         registerReceiver(mScreenBCR, mScreenOffFilter);
         //初始化服务线程
         initLjwServiceThread();
@@ -130,26 +126,15 @@ public class LjwService extends Service implements View.OnClickListener {
     }
 
 
-    @Override
-    public void onClick(View view) {
-        int i = view.getId();
-        //设置事件监听跳转到页面
-        if (i == R.id.ljw_float_img) {
-            if (AppContext.getInstance().getBaseActivity() != null) {
-                ljwServicehandler.sendEmptyMessage(GO_MAIN);
-            } else {
-                serviceMiaoshaUtil.countdownCancel();
-                LjwService.this.stopSelf();
-            }
-        }
-    }
 
     /**
      * 跳转到主页面
      * */
     private void goToMainActivity(){
-        Constant.makeAppName = Constant.PACKAGENAME;
-        Intent intent = Utils.getLJWAppIntent2(LjwService.this);
+        Utils.showSystem("startTime",Utils.getCurrentDate());
+//        Constant.makeAppName = Constant.PACKAGENAME;
+//        Intent intent = Utils.getLJWAppIntent2(LjwService.this);
+        Intent intent = new Intent(this,MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -169,14 +154,14 @@ public class LjwService extends Service implements View.OnClickListener {
                 //threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000 == 剩余时间
                 //需要解决的问题是怎么怎么计算剩余时间
                 long duration = (Constant.ENDTIME - threeTimePoint[0] * 60 * 60 * 1000 - threeTimePoint[1] * 60 * 1000 - threeTimePoint[2] * 1000) / 1000;
-
-                Intent intent = new Intent();  //Itent就是我们要发送的内容
-                //设置你这个广播的action，只有和这个action一样的接受者才能接受者才能接收广播
-                intent.setAction(Constant.ReceiveBroadCastKey.PREVENTBROAD_FLAG);
-                sendBroadcast(intent);//发送广播
+                if(Utils.isAppOnForeground(LjwService.this)){
+                    sendBroadcast(intentNoset);//发送广播
+                }
                 //判断是被回收
                 if(AppContext.getTempActivitySize()==0 || AppContext.getInstance().getMainActivity() == null){
                     ljwServicehandler.sendEmptyMessage(HIDDEN_SMALLWINDOW);
+                    serviceMiaoshaUtil.countdownCancel();
+                    LjwService.this.stopSelf();
                     return;
                 }
                 //设置桌面图标展示数据

@@ -130,10 +130,10 @@ public class Utils {
             for(int i=0;i<appTask.size();i++){
                 if(appTask.get(i).baseIntent.getComponent().getPackageName().equals(Constant.PACKAGENAME)){
                     isShow = false;
+                    break;
                 }
             }
         }
-//        Utils.showSystem("packagename",appTask.get(0).baseIntent.getComponent().getPackageName());
         appTask.clear();
         return isShow;
     }
@@ -472,9 +472,9 @@ public class Utils {
      * 测试打印
      * */
     public static void showSystem(String key,String context){
-        if(Constant.DEBUG){
+//        if(Constant.DEBUG){
             System.out.println("gyh--"+key+"--" + context);
-        }
+//        }
     }
     /**
      * 将数据写到sd卡中

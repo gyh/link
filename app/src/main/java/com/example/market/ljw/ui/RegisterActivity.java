@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.BaseActivity;
 import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
+import com.example.market.ljw.core.utils.Utils;
 import com.example.market.ljw.fragment.WebViewFragment;
 import com.example.market.ljw.core.utils.Constant;
 
@@ -17,18 +18,12 @@ public class RegisterActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        WebViewFragment.WebViewFragmentTM webViewFragmentTM = new WebViewFragment.WebViewFragmentTM(R.id.contain);
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.ValueKey.URLKEY, Constant.REGISTERURL);
-        webViewFragmentTM.setBundle(bundle);
-        ApplicationManager.go(webViewFragmentTM);
     }
 
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
-        }
-        return false;
+    protected void onResume() {
+        super.onResume();
+        Utils.showSystem("startTime", Utils.getCurrentDate());
     }
 }

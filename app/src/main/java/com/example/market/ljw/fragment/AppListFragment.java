@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -34,11 +35,11 @@ import java.util.List;
 public class AppListFragment extends MyActivity implements AdapterView.OnItemClickListener,View.OnClickListener {
 
     // 用来记录应用程序的信息
-    List<AppsItemInfo> appsItemInfos = new ArrayList<AppsItemInfo>();
+    private AppData appDataFirst;
     private GridView gridview;
     private PackageManager pManager;
     private ApplistAdapter applistAdapter;
-    private List<Intent> intentList = new ArrayList<Intent>();
+
     private View fragmentview ,layoutPhone,layoutMsg,layoutpeople,applistbottom,applistbottombtn;
     private ImageView applistbottomimg;
     private TextView tvTime , tvDate;
@@ -64,7 +65,11 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            applistAdapter.notifyDataSetChanged();
+            AppData appData = (AppData)msg.getData().getCharSequence("data",null);
+            if(appData!=null){
+                appDataFirst.setData(appData);
+                applistAdapter.notifyDataSetChanged();
+            }
         }
     };
     @Override
@@ -74,6 +79,7 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         fragmentview.setLayoutParams(layoutParams);
+        appDataFirst = new AppData();
         initView();
         return fragmentview;
     }
@@ -82,41 +88,48 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
      * 获取图片、应用名、包名
      */
     private void initData() {
-        appsItemInfos.clear();
-        intentList.clear();
         pManager = getActivity().getPackageManager();
-        List<ApplicationInfo> applicationInfos = Utils.getInstallAppInfo(getActivity());
-        AppsItemInfo ljw = new AppsItemInfo();
-        ljw.setlabelName("链接网");
-        appsItemInfos.add(ljw);
-        intentList.add(null);
-        for (int i = 0; i < applicationInfos.size(); i++) {
-            ApplicationInfo pinfo = applicationInfos.get(i);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppData appData = new AppData();
+                List<ApplicationInfo> applicationInfos = Utils.getInstallAppInfo(getActivity());
+                AppsItemInfo ljw = new AppsItemInfo();
+                ljw.setlabelName("链接网");
+                appData.getAppsItemInfos().add(ljw);
+                appData.getIntentList().add(null);
+                for (int i = 0; i < applicationInfos.size(); i++) {
+                    ApplicationInfo pinfo = applicationInfos.get(i);
 
-            Intent intent = getBaseActivity().getPackageManager().getLaunchIntentForPackage(pinfo.packageName);
-            if (intent == null) {
-                continue;
+                    Intent intent = getBaseActivity().getPackageManager().getLaunchIntentForPackage(pinfo.packageName);
+                    if (intent == null) {
+                        continue;
+                    }
+                    if(Constant.PACKAGENAME.equals(pinfo.packageName)){
+                        appData.getAppsItemInfos().get(0).setIcon(pManager.getApplicationIcon(pinfo));
+                        continue;
+                    }
+                    AppsItemInfo shareItem = new AppsItemInfo();
+                    // 设置图片
+                    shareItem.setIcon(pManager.getApplicationIcon(pinfo));
+                    // 设置应用程序名字
+                    shareItem.setlabelName(pManager.getApplicationLabel(pinfo).toString());
+                    // 设置应用程序的包名
+                    shareItem.setPackageName(pinfo.packageName);
+                    //获取信息跳转的intent
+                    if(shareItem.getPackageName().equals(Constant.MMSPACKAGENAME)){
+                        mmsIntent = intent;
+                    }
+                    appData.getAppsItemInfos().add(shareItem);
+                    appData.getIntentList().add(intent);
+                }
+                Message message = new Message();
+                Bundle bundle = new Bundle();
+                bundle.putCharSequence("data",appData);
+                message.setData(bundle);
+                handler.sendMessageDelayed(message,0);
             }
-            if(Constant.PACKAGENAME.equals(pinfo.packageName)){
-                appsItemInfos.get(0).setIcon(pManager.getApplicationIcon(pinfo));
-                continue;
-            }
-            AppsItemInfo shareItem = new AppsItemInfo();
-            // 设置图片
-            shareItem.setIcon(pManager.getApplicationIcon(pinfo));
-            // 设置应用程序名字
-            shareItem.setlabelName(pManager.getApplicationLabel(pinfo).toString());
-//            Utils.showSystem("pManager","Label"+shareItem.getlabelName());
-            // 设置应用程序的包名
-            shareItem.setPackageName(pinfo.packageName);
-//            Utils.showSystem("pManager","PackageName"+shareItem.getPackageName());
-            //获取信息跳转的intent
-            if(shareItem.getPackageName().equals(Constant.MMSPACKAGENAME)){
-                mmsIntent = intent;
-            }
-            appsItemInfos.add(shareItem);
-            intentList.add(intent);
-        }
+        }).start();
     }
 
     /**
@@ -130,7 +143,7 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
         layoutMsg = fragmentview.findViewById(R.id.layoutmsg);
         layoutpeople = fragmentview.findViewById(R.id.layoutpeople);
         gridview = (GridView) fragmentview.findViewById(R.id.gridview);
-        applistAdapter = new ApplistAdapter(getActivity(), appsItemInfos);
+        applistAdapter = new ApplistAdapter(getActivity(), appDataFirst.getAppsItemInfos());
         // 设置gridview的Adapter
         gridview.setAdapter(applistAdapter);
         // 点击应用图标时，做出响应
@@ -145,14 +158,13 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
     }
 
     @Override
-
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (i == 0) {
             ((MainActivity)getBaseActivity()).showMarkList();
         } else {
-            if (intentList.get(i) != null) {
-                Constant.makeAppName = intentList.get(i).getPackage();
-                getActivity().startActivity(intentList.get(i));
+            if (appDataFirst.intentList.get(i) != null) {
+                Constant.makeAppName = appDataFirst.getIntentList().get(i).getPackage();
+                getActivity().startActivity(appDataFirst.getIntentList().get(i));
             }
         }
     }
@@ -200,7 +212,6 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
     @Override
     public void onResume() {
         initData();
-        applistAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
@@ -209,6 +220,15 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
         super.onPause();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     /**
      * 应用列表图
@@ -228,7 +248,47 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
         }
 
         protected void doShow() {
-            addAndCommit(id,this.appListFragment);
+            addAndCommit(id, this.appListFragment);
+        }
+    }
+
+
+    /**
+     * 数据
+     * */
+    class AppData implements CharSequence {
+
+        List<Intent> intentList = new ArrayList<Intent>();
+        List<AppsItemInfo> appsItemInfos = new ArrayList<AppsItemInfo>();
+
+        void setData(AppData appData){
+            intentList.clear();
+            appsItemInfos.clear();
+            intentList.addAll(appData.intentList);
+            appsItemInfos.addAll(appData.appsItemInfos);
+        }
+
+        public List<Intent> getIntentList() {
+            return intentList;
+        }
+
+        public List<AppsItemInfo> getAppsItemInfos() {
+            return appsItemInfos;
+        }
+
+        @Override
+        public int length() {
+            return 0;
+        }
+
+        @Override
+        public char charAt(int i) {
+            return 0;
+        }
+
+        @Override
+        public CharSequence subSequence(int i, int i2) {
+            return null;
         }
     }
 }
