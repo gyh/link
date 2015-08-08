@@ -7,3 +7,8 @@
 LJW.iml
 app.iml
 .idea/misc.xml
+.idea
+apks
+library/library.iml
+library\service\lock\lock.iml
+.idea\modules.xml
