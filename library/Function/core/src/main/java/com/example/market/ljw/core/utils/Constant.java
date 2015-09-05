@@ -35,11 +35,12 @@ public class Constant {
 
     //判断是否是测试
     public static boolean DEBUG = false;
+    //判断是否退出
 
     public static final String SharedPreferencesKey = "LJW";
 
     //最后等待时间
-    public static int theNextLen = 600;
+//    public static int theNextLen = 600;
     public static final int theWaitTime = 600;
     //定义一秒
     public  static final long delayMillis = 1000;
@@ -91,6 +92,12 @@ public class Constant {
     }
     public static class ExtraKey{
         public static final String MEMBER ="member";
+    }
+
+    public static class MainActivityState{
+        public static final int OVER = 0;//结束状态
+        public static final int RUN = 1;//运行状态
+        public static final int CREATE = 2;//创建
     }
 
     /**

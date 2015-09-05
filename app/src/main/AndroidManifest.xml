@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
-        android:name="com.example.market.ljw.core.common.frame.AppContext"
+        android:name="com.example.market.ljw.core.common.frame.MyAppContext"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -53,7 +53,6 @@
 
         <activity
             android:name=".ui.WelcomeActivity"
-            android:theme="@style/welcomeTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,9 +68,6 @@
             android:name=".db.provider.DataProvider"
             android:authorities="com.example.market.ljw"
             android:exported="false" />
-        <activity android:name=".glowpadview.LockActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleInstance"/>
         <activity
             android:name=".ui.LoginActivity"
             android:screenOrientation="portrait"/>

@@ -1,6 +1,8 @@
 package com.example.market.ljw.fragment;
 
 import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import android.widget.LinearLayout;
 
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.MyActivity;
+import com.example.market.ljw.core.common.frame.MyAppContext;
+import com.example.market.ljw.core.common.frame.taskstack.MyFragment;
 import com.example.market.ljw.core.common.frame.taskstack.NeedShowAgainModule;
 import com.example.market.ljw.core.utils.Constant;
 import com.example.market.ljw.core.utils.PromptUtil;
@@ -25,21 +29,23 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 /**
  * Created by GYH on 2014/10/21.
  */
-public class WebViewFragment extends MyActivity {
+public class WebViewFragment extends MyFragment {
 
     public static WebView mWebView;
     private View fragmentview;
     private NiftyDialogBuilder dialogBuilder;
 
     @Override
-    protected View realCreateViewMethod(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup) {
-        fragmentview = paramLayoutInflater.inflate(R.layout.fragment_webview, null);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
+        fragmentview = inflater.inflate(R.layout.fragment_webview, null);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         fragmentview.setLayoutParams(layoutParams);
         mWebView = (WebView) fragmentview.findViewById(R.id.webviewhtml);
-        dialogBuilder = NiftyDialogBuilder.getInstance(getBaseActivity());
+        dialogBuilder = NiftyDialogBuilder.getInstance(MyAppContext.getInstance());
 
         //可以通过getSettings()获得WebSettings，然后用setJavaScriptEnabled()使能JavaScript：
         WebSettings webSettings = mWebView.getSettings();
@@ -54,7 +60,7 @@ public class WebViewFragment extends MyActivity {
         mWebView.setWebChromeClient(new MyWebChromeClient());//设置弹出框
 
         //WebView cookies清理
-        CookieSyncManager.createInstance(getBaseActivity());
+        CookieSyncManager.createInstance(MyAppContext.getInstance());
         CookieSyncManager.getInstance().startSync();
         CookieManager.getInstance().removeSessionCookie();
         //清理cache 和历史记录的方法：
@@ -96,7 +102,7 @@ public class WebViewFragment extends MyActivity {
         //两个按钮的弹出框
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-            PromptUtil.showonJsConfirm(getBaseActivity(), Effectstype.Shake, dialogBuilder, fragmentview, new View.OnClickListener() {
+            PromptUtil.showonJsConfirm(MyAppContext.getInstance(), Effectstype.Shake, dialogBuilder, fragmentview, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     result.confirm();
@@ -115,7 +121,7 @@ public class WebViewFragment extends MyActivity {
         //一个按钮的弹出框
         @Override
         public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
-            PromptUtil.showonJsAlert(getBaseActivity(), Effectstype.Shake, dialogBuilder, fragmentview, new View.OnClickListener() {
+            PromptUtil.showonJsAlert(MyAppContext.getInstance(), Effectstype.Shake, dialogBuilder, fragmentview, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     result.confirm();
@@ -131,25 +137,4 @@ public class WebViewFragment extends MyActivity {
         }
     }
 
-    /**
-     * 商场
-     */
-    public static class WebViewFragmentTM extends NeedShowAgainModule {
-
-        private WebViewFragment webViewFragment;
-        private int id;
-
-        public WebViewFragmentTM(int id) {
-            this.id = id;
-        }
-
-        protected void doInit() {
-            this.webViewFragment = new WebViewFragment();
-            this.webViewFragment.setArguments(getBundle());
-        }
-
-        protected void doShow() {
-            replaceAndCommit(id, this.webViewFragment);
-        }
-    }
 }

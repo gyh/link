@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\workspace\LJW\library\function\resourceljw\src\main\res"><file name="ic_alarm_alert_outerring" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable\ic_alarm_alert_outerring.xml" qualifiers="" type="drawable"/><file name="ic_alarm_alert_touch_handle" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable\ic_alarm_alert_touch_handle.xml" qualifiers="" type="drawable"/><file name="ic_item_camera" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable\ic_item_camera.xml" qualifiers="" type="drawable"/><file name="ic_item_google" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable\ic_item_google.xml" qualifiers="" type="drawable"/><file name="shadow" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable\shadow.9.png" qualifiers="" type="drawable"/><file name="default_empty" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-hdpi\default_empty.png" qualifiers="hdpi" type="drawable"/><file name="ic_launcher" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-hdpi\ic_launcher.png" qualifiers="hdpi" type="drawable"/><file name="ic_launcher" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-mdpi\ic_launcher.png" qualifiers="mdpi" type="drawable"/><file name="ljw_loading" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-mdpi\ljw_loading.jpg" qualifiers="mdpi" type="drawable"/><file name="action_fx" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\action_fx.png" qualifiers="xhdpi" type="drawable"/><file name="carousel_dot_indicator_state_normal" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\carousel_dot_indicator_state_normal.png" qualifiers="xhdpi" type="drawable"/><file name="carousel_dot_indicator_state_select" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\carousel_dot_indicator_state_select.png" qualifiers="xhdpi" type="drawable"/><file name="gradient_down" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\gradient_down.png" qualifiers="xhdpi" type="drawable"/><file name="gradient_up" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\gradient_up.png" qualifiers="xhdpi" type="drawable"/><file name="ic_launcher" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\ic_launcher.png" qualifiers="xhdpi" type="drawable"/><file name="ic_lockscreen_camera_normal" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\ic_lockscreen_camera_normal.png" qualifiers="xhdpi" type="drawable"/><file name="ic_lockscreen_glowdot" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\ic_lockscreen_glowdot.png" qualifiers="xhdpi" type="drawable"/><file name="ic_lockscreen_google_focused" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\ic_lockscreen_google_focused.png" qualifiers="xhdpi" type="drawable"/><file name="ic_lockscreen_google_normal" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\ic_lockscreen_google_normal.png" qualifiers="xhdpi" type="drawable"/><file name="ic_lockscreen_handle_normal" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\ic_lockscreen_handle_normal.png" qualifiers="xhdpi" type="drawable"/><file name="ic_lockscreen_handle_pressed" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xhdpi\ic_lockscreen_handle_pressed.png" qualifiers="xhdpi" type="drawable"/><file name="ic_launcher" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\drawable-xxhdpi\ic_launcher.png" qualifiers="xxhdpi" type="drawable"/><file name="custom_view" path="D:\workspace\LJW\library\function\resourceljw\src\main\res\layout\custom_view.xml" qualifiers="" type="layout"/><file path="D:\workspace\LJW\library\function\resourceljw\src\main\res\values\arrays.xml" qualifiers=""><array name="snooze_dismiss_descriptions">
+        <item>dismiss</item>
+        <item>@null</item>
+        <item>snooze</item>
+        <item>@null</item>
+    </array><array name="snooze_dismiss_direction_descriptions">
+        <item>right</item>
+        <item>@null</item>
+        <item>left</item>
+        <item>@null</item>
+    </array><array name="snooze_dismiss_drawables">
+        <item>@drawable/ic_item_google</item>
+        <item>@null</item>
+        <item>@drawable/ic_item_camera</item>
+        <item>@null</item>
+    </array></file><file path="D:\workspace\LJW\library\function\resourceljw\src\main\res\values\attrs.xml" qualifiers=""><declare-styleable name="AnalogClock">
+        <attr format="dimension" name="jewelRadius"/>
+        <attr format="dimension" name="jewelOffset"/>
+        <attr format="color" name="jewelColor"/>
+    </declare-styleable><declare-styleable name="GlowPadView">
+        <attr name="android:gravity"/>
+
+        <!-- Reference to an array resource that be shown as targets around a circle. -->
+        <attr format="reference" name="targetDrawables"/>
+
+        <!-- Reference to an array resource that be used as description for the targets around the circle. -->
+        <attr format="reference" name="targetDescriptions"/>
+
+        <!-- Reference to an array resource that be used to announce the directions with targets around the circle. -->
+        <attr format="reference" name="directionDescriptions"/>
+
+        <!-- Sets a drawable as the center. -->
+        <attr format="reference" name="handleDrawable"/>
+
+        <!-- Drawable to use for wave ripple animation. -->
+        <attr format="reference" name="outerRingDrawable"/>
+
+        <!-- Drawble used for drawing points -->
+        <attr format="reference" name="pointDrawable"/>
+
+        <!-- Inner radius of glow area. -->
+        <attr format="dimension" name="innerRadius"/>
+
+        <!-- Outer radius of glow area. Target icons will be drawn on this circle. -->
+        <attr format="dimension" name="outerRadius"/>
+
+        <!-- Size of target radius. Points within this distance of target center is a "hit". -->
+        <!--
+        <attr name="hitRadius" format="dimension"/>
+        -->
+
+        <!-- Radius of glow under finger. -->
+        <attr format="dimension" name="glowRadius"/>
+
+        <!-- Tactile feedback duration for actions. Set to '0' for no vibration. -->
+        <attr format="integer" name="vibrationDuration"/>
+
+        <!-- How close we need to be before snapping to a target. -->
+        <attr format="dimension" name="snapMargin"/>
+
+        <!-- Number of waves/chevrons to show in animation. -->
+        <attr format="integer" name="feedbackCount"/>
+
+        <!-- Used when the handle shouldn't wait to be hit before following the finger -->
+        <attr format="boolean" name="alwaysTrackFinger"/>
+    </declare-styleable></file><file path="D:\workspace\LJW\library\function\resourceljw\src\main\res\values\colors.xml" qualifiers=""><color name="windowsbg">#EEEEEE</color><color name="line">#CCCCCC</color><color name="white">#ffffff</color><color name="black">#000000</color><color name="fount_bg">#0f000000</color><color name="gray">#FFFEEE</color><color name="theme">#990033</color></file><file path="D:\workspace\LJW\library\function\resourceljw\src\main\res\values\dimens.xml" qualifiers=""><dimen name="glowpadview_outerring_diameter">270dip</dimen><dimen name="glowpadview_inner_radius">15dip</dimen><dimen name="glowpadview_snap_margin">40dip</dimen><dimen name="glowpadview_margin_right">0dip</dimen><dimen name="activity_horizontal_margin">16dp</dimen><dimen name="glowpadview_glow_radius">75dip</dimen><dimen name="glowpadview_target_placement_radius">135dip</dimen><dimen name="glowpadview_margin_bottom">-64dip</dimen><dimen name="activity_vertical_margin">16dp</dimen><dimen name="padding_middle">8dp</dimen></file><file path="D:\workspace\LJW\library\function\resourceljw\src\main\res\values\strings.xml" qualifiers=""><string name="app_name">链接网</string></file><file path="D:\workspace\LJW\library\function\resourceljw\src\main\res\values\styles.xml" qualifiers=""><style name="top_text">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+    </style><style name="welcomeTheme" parent="android:Theme.Holo.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/ljw_loading</item>
+
+    </style><style name="login_input_text_et" parent="login_input_text">
+        <item name="android:background">@color/white</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style><style name="login_input_text">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style><style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/black</item>
+
+    </style></file><file path="D:\workspace\LJW\library\function\resourceljw\src\main\res\values-w820dp\dimens.xml" qualifiers="w820dp"><dimen name="activity_horizontal_margin">64dp</dimen></file></source><source path="D:\workspace\LJW\library\function\resourceljw\build\generated\res\rs\release"/><source path="D:\workspace\LJW\library\function\resourceljw\build\generated\res\generated\release"/></dataSet><dataSet config="release"><source path="D:\workspace\LJW\library\function\resourceljw\src\release\res"/></dataSet><mergedItems><configuration qualifiers=""><declare-styleable name="GlowPadView"><attr name="android:gravity"/><attr format="reference" name="targetDrawables"/><attr format="reference" name="targetDescriptions"/><attr format="reference" name="directionDescriptions"/><attr format="reference" name="handleDrawable"/><attr format="reference" name="outerRingDrawable"/><attr format="reference" name="pointDrawable"/><attr format="dimension" name="innerRadius"/><attr format="dimension" name="outerRadius"/><attr format="dimension" name="glowRadius"/><attr format="integer" name="vibrationDuration"/><attr format="dimension" name="snapMargin"/><attr format="integer" name="feedbackCount"/><attr format="boolean" name="alwaysTrackFinger"/></declare-styleable><declare-styleable name="AnalogClock"><attr format="dimension" name="jewelRadius"/><attr format="dimension" name="jewelOffset"/><attr format="color" name="jewelColor"/></declare-styleable></configuration></mergedItems></merger>
