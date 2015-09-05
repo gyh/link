@@ -1,17 +1,14 @@
 package com.example.market.ljw.core.utils;
 
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.market.ljw.core.R;
 import com.example.market.ljw.core.cache.bitmap.HandlerRecycleBitmapDrawable;
 import com.example.market.ljw.core.common.frame.MyActivity;
-import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
@@ -21,7 +18,7 @@ import java.util.List;
 public class ImageAdapter extends PagerAdapter {
     private List<ImageView> imageViews;
     private List<String> imageurls;
-    private Fragment myActivity;
+    private MyActivity myActivity;
     private boolean isfirst=true;
     //设置条目点击事件
     private View.OnClickListener clickListener;
@@ -43,17 +40,17 @@ public class ImageAdapter extends PagerAdapter {
         this.isInUsing = isInUsing;
     }
 
-    public ImageAdapter(List<ImageView> imageViews,List<String> imageurls,Fragment myActivity,View.OnClickListener clickListener){
+    public ImageAdapter(List<ImageView> imageViews,List<String> imageurls,MyActivity myActivity,View.OnClickListener clickListener){
         this(imageViews,imageurls,myActivity);
         this.clickListener = clickListener;
     }
 
-    public ImageAdapter(List<ImageView> imageViews,List<String> imageurls,Fragment myActivity){
+    public ImageAdapter(List<ImageView> imageViews,List<String> imageurls,MyActivity myActivity){
         this(imageurls,myActivity);
         this.imageViews=imageViews;
     }
 
-    public ImageAdapter(List<String> imageurls,Fragment myActivity){
+    public ImageAdapter(List<String> imageurls,MyActivity myActivity){
         this.imageurls=imageurls;
         this.myActivity = myActivity;
     }
@@ -71,19 +68,14 @@ public class ImageAdapter extends PagerAdapter {
         imageViews.get(position).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
                     isTouched = true;
-                else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)
+                else if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL)
                     isTouched = false;
                 return false;
             }
         });
-        Ion.with(myActivity)
-                .load(imageurls.get(position))
-                .withBitmap()
-                .placeholder(R.drawable.ic_launcher)
-                .error(R.drawable.ic_item_google)
-                .intoImageView(imageViews.get(position));
+        myActivity.showPageImage(imageurls.get(position),imageViews.get(position),false,isfirst,isInUsing);
         isfirst=false;
         container.addView(imageViews.get(position), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return imageViews.get(position);
@@ -97,9 +89,9 @@ public class ImageAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int arg1, Object arg2) {
         container.removeView((View) arg2);
-//        HandlerRecycleBitmapDrawable handlerRecycleBitmapDrawable = (HandlerRecycleBitmapDrawable)imageViews.get(arg1).getDrawable();
-//        handlerRecycleBitmapDrawable.setBitmap(null);
-//        handlerRecycleBitmapDrawable.invalidateSelf();
+        HandlerRecycleBitmapDrawable handlerRecycleBitmapDrawable = (HandlerRecycleBitmapDrawable)imageViews.get(arg1).getDrawable();
+        handlerRecycleBitmapDrawable.setBitmap(null);
+        handlerRecycleBitmapDrawable.invalidateSelf();
     }
 
     @Override

@@ -1,8 +1,5 @@
 package com.example.market.ljw.fragment;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +8,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
-import com.example.market.ljw.core.common.frame.MyAppContext;
-import com.example.market.ljw.core.common.frame.taskstack.MyFragment;
 import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
 
@@ -29,18 +24,21 @@ import java.util.List;
 /**
  * Created by GYH on 2014/10/18.
  */
-public class MarketListFragment extends MyFragment implements AdapterView.OnItemClickListener {
+public class MarketListFragment extends MyActivity implements AdapterView.OnItemClickListener {
 
     List<AppsItemInfo> appsItemInfos;
     List<String> urlList = new ArrayList<String>();
     private GridView gridview;
+    private WebView mWebView;
     private ApplistAdapter applistAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_marketlist,null);
+    protected View realCreateViewMethod(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup) {
+        View view = paramLayoutInflater.inflate(R.layout.fragment_marketlist,null);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(layoutParams);
         initData();
         initView(view);
         return view;
@@ -51,25 +49,25 @@ public class MarketListFragment extends MyFragment implements AdapterView.OnItem
         AppsItemInfo appsItemInfo = new AppsItemInfo();
         appsItemInfo.setIcon(getActivity().getResources().getDrawable(R.drawable.icon_my_market));
         appsItemInfo.setlabelName("我的商城");
-        urlList.add(Constant.LJWBASE_URL + "MemberShop/Login.aspx?returnUrl=/MemberShop/Default.aspx" +
-                "&token=" + MyAppContext.getInstance()
-                .getDataForShPre(Constant.SaveKeys.TOKENKEY, ""));
+        urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberShop/Default.aspx" +
+                "&token="+ AppContext.getInstance().getBaseActivity()
+                .getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
         appsItemInfos.add(appsItemInfo);
 
         AppsItemInfo appsItemInfo1 = new AppsItemInfo();
         appsItemInfo1.setIcon(getActivity().getResources().getDrawable(R.drawable.icon_my_account));
         appsItemInfo1.setlabelName("会员中心");
         urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberCenterHome.aspx" +
-                "&token="+MyAppContext.getInstance()
+                "&token="+AppContext.getInstance().getBaseActivity()
                 .getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
         appsItemInfos.add(appsItemInfo1);
 
         AppsItemInfo appsItemInfoJiaMeng = new AppsItemInfo();
         appsItemInfoJiaMeng.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_company));
         appsItemInfoJiaMeng.setlabelName("加盟企业");
-        urlList.add(Constant.LJWBASE_URL + "MemberShop/Login.aspx?returnUrl=/MemberCompanyList.aspx" +
-                "&token=" + MyAppContext.getInstance()
-                .getDataForShPre(Constant.SaveKeys.TOKENKEY, ""));
+        urlList.add(Constant.LJWBASE_URL+"MemberShop/Login.aspx?returnUrl=/MemberCompanyList.aspx" +
+                "&token="+AppContext.getInstance().getBaseActivity()
+                .getDataForShPre(Constant.SaveKeys.TOKENKEY,""));
         appsItemInfos.add(appsItemInfoJiaMeng);
 
         AppsItemInfo appsItemInfo4 = new AppsItemInfo();
@@ -153,14 +151,28 @@ public class MarketListFragment extends MyFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        WebViewFragment webViewFragment = new WebViewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.ValueKey.URLKEY, urlList.get(i));
-        webViewFragment.setArguments(bundle);
+        ((MainActivity)getBaseActivity()).showWebView(0, urlList.get(i));
+    }
 
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.contain, webViewFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+    /**
+     * 商场列表图
+     */
+    public static class MarketListFragmentTM extends NeedShowAgainModule {
+
+        private MarketListFragment marketListFragment;
+        private int id;
+
+        public MarketListFragmentTM(int id){
+            this.id = id;
+        }
+
+        protected void doInit() {
+            this.marketListFragment = new MarketListFragment();
+            this.marketListFragment.setArguments(getBundle());
+        }
+
+        protected void doShow() {
+            replaceAndCommit(id, this.marketListFragment);
+        }
     }
 }

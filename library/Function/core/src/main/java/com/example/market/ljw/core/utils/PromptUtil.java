@@ -1,6 +1,5 @@
 package com.example.market.ljw.core.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
@@ -31,7 +30,7 @@ public class PromptUtil {
         Toast.makeText(baseActivity, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showExitAlert(final NiftyDialogBuilder dialogBuilder,Activity baseActivity, Effectstype effect, View view,
+    public static void showExitAlert(final NiftyDialogBuilder dialogBuilder,BaseActivity baseActivity, Effectstype effect, View view,
                                      View.OnClickListener clickyes){
         if(dialogBuilder == null){
             baseActivity.finish();
@@ -61,7 +60,7 @@ public class PromptUtil {
                 .show();
     }
 
-    public static void showXiaomiInfo(Activity baseActivity, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
+    public static void showXiaomiInfo(BaseActivity baseActivity, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
                                      View.OnClickListener clickfirst,View.OnClickListener clicksecond){
         dialogBuilder
                 .withTitle("链接网")                                  //.withTitle(null)  no title
@@ -82,7 +81,7 @@ public class PromptUtil {
                 .show();
     }
 
-    public static void showIsNetWork(Activity baseActivity, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
+    public static void showIsNetWork(BaseActivity baseActivity, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
                                       View.OnClickListener clickfirst,View.OnClickListener clicksecond){
         dialogBuilder
                 .withTitle("链接网")                                  //.withTitle(null)  no title

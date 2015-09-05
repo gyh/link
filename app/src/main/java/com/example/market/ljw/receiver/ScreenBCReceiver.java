@@ -25,11 +25,15 @@ public class ScreenBCReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
+        if (AppContext.getInstance().getBaseActivity() == null) {
+            return;
+        }
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
         if(tm.getCallState() == TelephonyManager.CALL_STATE_RINGING || tm.getCallState() ==TelephonyManager.CALL_STATE_OFFHOOK){
             return;
         }
         if (intent != null && Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
+            Utils.showSystem("startTime", Utils.getCurrentDate());
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

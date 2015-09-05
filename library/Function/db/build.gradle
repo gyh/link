@@ -1,11 +1,11 @@
 apply plugin: 'android-library'
 
 android {
-    compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
-    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
     defaultConfig {
-        minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
-        targetSdkVersion project.ANDROID_BUILD_TARGET_SDK_VERSION
+        minSdkVersion 8
+        targetSdkVersion 19
     }
     buildTypes {
         release {
@@ -23,5 +23,5 @@ android {
 dependencies {
     compile 'com.novoda:sqliteprovider-core:1.0.3'
     compile project(':library:function:entity')
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:support-v4:19.+'
 }

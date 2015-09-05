@@ -30,6 +30,5 @@
     <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="http-request-5.6" level="project" />
     <orderEntry type="library" exported="" name="json-20140107" level="project" />
-    <orderEntry type="library" exported="" name="entity.entity" level="project" />
   </component>
 </module>

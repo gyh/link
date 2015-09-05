@@ -1,6 +1,5 @@
 package com.example.market.ljw.entity.bean.input;
 
-
 /**
  * Created by GYH on 2014/10/22.
  */

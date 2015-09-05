@@ -1,23 +1,14 @@
 package com.example.market.ljw.fragment;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.example.market.ljw.core.common.frame.BaseActivity;
-import com.example.market.ljw.core.common.frame.MyAppContext;
-import com.example.market.ljw.core.utils.PromptUtil;
-import com.example.market.ljw.entity.bean.output.MemberOutput;
-import com.example.market.ljw.entity.bean.output.UserData;
 import com.example.market.ljw.ui.MainActivity;
 import com.example.market.ljw.R;
 import com.example.market.ljw.entity.bean.Entity;
@@ -34,9 +25,6 @@ import com.example.market.ljw.core.utils.PopUtils;
 import com.example.market.ljw.core.utils.Utils;
 import com.example.market.ljw.core.utils.view.HackyViewPager;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -46,14 +34,12 @@ import java.util.Map;
 /**
  * Created by GYH on 2014/10/16.
  */
-public class CarouselFragment extends Fragment {
-
-    public static final String tag = "com.example.market.ljw.fragment.CarouselFragment";
+public class CarouselFragment extends MyActivity {
 
     //轮播图控件
     private HackyViewPager mViewPager;
     //图片连接集合
-    private List<String> imageurls = new ArrayList<>();
+    private List<String> imageurls;
     //lock图片
     public final static int IMG_WIDTH = 640;
     public final static int IMG_HEIGHT = 150;
@@ -78,27 +64,27 @@ public class CarouselFragment extends Fragment {
             sendMessageDelayed(handler.obtainMessage(1), carouselTime);
         }
     };
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        fragmentview = inflater.inflate(R.layout.fragment_carousel, null);
+    protected View realCreateViewMethod(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup) {
+        fragmentview = inflate(R.layout.fragment_carousel);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        fragmentview.setLayoutParams(layoutParams);
         initView();
-        initPagerPic();
         initData();
         return fragmentview;
     }
 
     /**
      * 初始化广告图片
-     */
-    private void initPagerPic() {
+     * */
+    private void initPagerPic(){
         ViewGroup.LayoutParams linearParams = mViewPager.getLayoutParams();
         linearParams.height = (int) ((float) DPIUtil.getWidth() / (float) IMG_WIDTH * IMG_HEIGHT);
         linearParams.width = DPIUtil.getWidth();
         ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
-        for (int i = 0; i < imageurls.size(); i++) {
+        for(int i =0;i<imageurls.size();i++){
             ImageView imageView = new ImageView(getActivity());
             imageView.setLayoutParams(linearParams);
             imageViews.add(imageView);
@@ -120,54 +106,55 @@ public class CarouselFragment extends Fragment {
         });
         imageAdapter.setInUsing(true);
         mViewPager.setAdapter(imageAdapter);
-        initPointIndex(fragmentview, imageurls, mViewPager);
+        initPointIndex(fragmentview,imageurls,mViewPager);
     }
 
     /**
      * 初始化数据
      * http://markettest.strosoft.com/API/Service.ashx?service_name=get_advertisement_list&data={AdvertisementTypeCode:%27product%27}
-     */
-    private void initData() {
-        if (Utils.isNetworkConnected(getActivity())) {
-            Ion.with(MyAppContext.getInstance())
-                    .load(Constant.SERVER_URL)
-                    .setBodyParameter(Constant.RequestKeys.SERVICENAME, "get_advertisement_list")
-                    .setBodyParameter(Constant.RequestKeys.DATA, new Gson().toJson(InputDataUtils.getPics()))
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            if (e != null) {
-                                return;
-                            }
-                            AdvertisementOutput advertisementOutput = new AdvertisementOutput();
-                            try {
-                                advertisementOutput.setContent(result.toString());
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                                PromptUtil.showMessage(getActivity(), e1.toString());
-                            }
-                            if (advertisementOutput.isSuccess()) {
-                                imageurls = new ArrayList<String>();
-                                for (int i = 0; i < advertisementOutput.getAdvertisements().size(); i++) {
-                                    imageurls.add(Constant.SERVERBASE_URL + advertisementOutput.getAdvertisements().get(i).getImageUrl());
-                                }
-                                initPointIndex(fragmentview, imageurls, mViewPager);
-                                imageAdapter.notifyDataSetChanged();
-                                handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
-                            } else {
-                                fragmentview.setVisibility(View.GONE);
-                            }
+     * */
+    private void initData(){
+        if(Utils.isNetworkConnected(getBaseActivity())){
+            Gson gson = new Gson();
+            Map<String, Object> param = new LinkedHashMap<String, Object>();
+            param.put(Constant.RequestKeys.SERVICENAME, "get_advertisement_list");
+            param.put(Constant.RequestKeys.DATA, gson.toJson(InputDataUtils.getPics()));
+            getBaseActivity().execute(Constant.SERVER_URL, false, param, null, new HttpGroup.OnEndListener() {
+                @Override
+                public void onEnd(HttpResponse httpresponse) {
+                    AdvertisementOutput advertisementOutput = (AdvertisementOutput) httpresponse.getResultObject();
+                    if (advertisementOutput.isSuccess()) {
+                        imageurls = new ArrayList<String>();
+                        for (int i = 0; i < advertisementOutput.getAdvertisements().size(); i++) {
+                            imageurls.add(Constant.SERVERBASE_URL + advertisementOutput.getAdvertisements().get(i).getImageUrl());
                         }
-                    });
-        } else {
+                        //记录本地----
+                        Constant.imageurls.clear();
+                        Constant.imageurls.addAll(imageurls);
+                        //------记录本地结束
+                        initPagerPic();
+                        handler.sendMessageDelayed(handler.obtainMessage(1), carouselTime);
+                    } else {
+                        fragmentview.setVisibility(View.GONE);
+                        PopUtils.showToast(advertisementOutput.getErrmsg());
+                    }
+                }
+            }, new HttpGroup.OnParseListener() {
+                @Override
+                public Entity onParse(String result) {
+                    AdvertisementOutput advertisementOutput = new AdvertisementOutput();
+                    advertisementOutput.setContent(result);
+                    return advertisementOutput;
+                }
+            });
+        }else {
             imageurls = new ArrayList<String>();
             imageurls.clear();
             //判断本地存储是否为空
-            if (Constant.imageurls.size() == 0) {
+            if(Constant.imageurls.size()  == 0){
                 //如果为空，则隐藏
                 fragmentview.setVisibility(View.GONE);
-            } else {
+            }else {
                 //不为空则显示图片
                 imageurls.addAll(Constant.imageurls);
                 initPagerPic();
@@ -178,8 +165,8 @@ public class CarouselFragment extends Fragment {
 
     /**
      * 初始化布局
-     */
-    private void initView() {
+     * */
+    private void initView(){
         mViewPager = (HackyViewPager) fragmentview.findViewById(R.id.carousel_viewpage);
     }
 
@@ -196,9 +183,9 @@ public class CarouselFragment extends Fragment {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-            if (i != imageurls.size() - 1)
-                layoutParams.setMargins(0, 0, (int) getActivity().getResources().getDimension(R.dimen.padding_middle), 0);
-            ImageView imageView = new ImageView(getActivity());
+            if(i != imageurls.size()-1)
+                layoutParams.setMargins(0, 0, (int) getThisActivity().getResources().getDimension(R.dimen.padding_middle), 0);
+            ImageView imageView = new ImageView(getThisActivity());
             if (i == 0)
                 imageView.setImageResource(R.drawable.carousel_dot_indicator_state_select);
             else
@@ -249,5 +236,27 @@ public class CarouselFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         handler.removeMessages(1);
+    }
+
+    /**
+     * 轮播图
+     */
+    public static class CarouselFragmentTM extends TaskModule {
+
+        private CarouselFragment carouselFragment;
+        private int id;
+
+        public CarouselFragmentTM(int id){
+            this.id = id;
+        }
+
+        protected void doInit() {
+            this.carouselFragment = new CarouselFragment();
+            this.carouselFragment.setArguments(getBundle());
+        }
+
+        protected void doShow() {
+            addAndCommit(id,this.carouselFragment);
+        }
     }
 }

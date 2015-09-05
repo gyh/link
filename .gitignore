@@ -12,5 +12,3 @@ apks
 library/library.iml
 library\service\lock\lock.iml
 .idea\modules.xml
-gradle.properties
-deploy_test.gradle

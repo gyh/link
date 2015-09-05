@@ -31,7 +31,7 @@ public class LockActivity extends BaseActivity implements GlowPadView.OnTriggerL
         //屏蔽Home键
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            this.getWindow().setType(WindowManager.LayoutParams.TYPE_CHANGED);
+            this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
         } else {
             this.getWindow().setFlags(FLAG_HOMEKEY_DISPATCHED, FLAG_HOMEKEY_DISPATCHED);//关键代码
         }

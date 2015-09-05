@@ -19,7 +19,6 @@ import com.baidu.mobstat.StatService;
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.AppContext;
 import com.example.market.ljw.core.common.frame.BaseActivity;
-import com.example.market.ljw.core.common.frame.MyBaseActivity;
 import com.example.market.ljw.receiver.DownloadCompleteReceiver;
 import com.example.market.ljw.core.utils.Constant;
 import com.example.market.ljw.core.utils.PromptUtil;
@@ -36,7 +35,7 @@ import java.util.HashMap;
 /**
  * Created by GYH on 2014/10/21.
  */
-public class WelcomeActivity extends MyBaseActivity implements CheckUpdateListener,PostChoiceListener {
+public class WelcomeActivity extends BaseActivity implements CheckUpdateListener,PostChoiceListener {
 
     private UpdateDialog utestUpdate;
     private CheckUpdateListener mCheckUpdateResponse;
@@ -56,27 +55,16 @@ public class WelcomeActivity extends MyBaseActivity implements CheckUpdateListen
         Constant.REGISTERURL = Constant.LJWBASE_URL+"MemberShop/Register.aspx";
         downloadCompleteReceiver = new DownloadCompleteReceiver();//创建下载完毕接收器
         Constant.ShowPackName.ANDROID_HOME=Utils.getLauncherPackageName(WelcomeActivity.this);//设置当前home页面包名
-        goWhereForMain();
-    }
-
-    private void goWhereForMain(){
-        post(new Runnable() {
-            @Override
-            public void run() {
-                if(MainActivity.currentStats == Constant.MainActivityState.OVER){
-                    setBaiduTongji();
-                }else {
-                    startActivity(new Intent(WelcomeActivity.this,MainActivity.class));
-                    finish();
-                }
-            }
-        },2000);
+        setBaiduTongji();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(downloadCompleteReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        if(AppContext.getTempActivitySize()!=0 && AppContext.getInstance().getMainActivity() != null){
+            finish();
+        }
     }
 
     @Override
@@ -122,6 +110,9 @@ public class WelcomeActivity extends MyBaseActivity implements CheckUpdateListen
             Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        if(AppContext.getTempActivitySize()!=0 && AppContext.getInstance().getMainActivity() != null){
+            return;
         }
         Intent intent = new Intent();
         intent.setClass(WelcomeActivity.this, LoginActivity.class);

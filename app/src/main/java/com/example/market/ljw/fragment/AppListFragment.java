@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +32,7 @@ import java.util.List;
 /**
  * Created by GYH on 2014/10/18.
  */
-public class AppListFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener {
-
-    public static final String tag = "com.example.market.ljw.fragment.AppListFragment";
+public class AppListFragment extends MyActivity implements AdapterView.OnItemClickListener,View.OnClickListener {
 
     // 用来记录应用程序的信息
     private AppData appDataFirst;
@@ -65,6 +61,7 @@ public class AppListFragment extends Fragment implements AdapterView.OnItemClick
         }
     };
 
+    //轮询通知操作
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -76,9 +73,12 @@ public class AppListFragment extends Fragment implements AdapterView.OnItemClick
         }
     };
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        fragmentview = inflater.inflate(R.layout.fragment_applist, null);
+    protected View realCreateViewMethod(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup) {
+        fragmentview = paramLayoutInflater.inflate(R.layout.fragment_applist, null);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        fragmentview.setLayoutParams(layoutParams);
         appDataFirst = new AppData();
         initView();
         return fragmentview;
@@ -100,7 +100,8 @@ public class AppListFragment extends Fragment implements AdapterView.OnItemClick
                 appData.getIntentList().add(null);
                 for (int i = 0; i < applicationInfos.size(); i++) {
                     ApplicationInfo pinfo = applicationInfos.get(i);
-                    Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(pinfo.packageName);
+
+                    Intent intent = getBaseActivity().getPackageManager().getLaunchIntentForPackage(pinfo.packageName);
                     if (intent == null) {
                         continue;
                     }
@@ -159,11 +160,7 @@ public class AppListFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (i == 0) {
-            MarketListFragment marketListFragment = new MarketListFragment();
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.contain,marketListFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            ((MainActivity)getBaseActivity()).showMarkList();
         } else {
             if (appDataFirst.intentList.get(i) != null) {
                 Constant.makeAppName = appDataFirst.getIntentList().get(i).getPackage();
@@ -231,6 +228,28 @@ public class AppListFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    /**
+     * 应用列表图
+     */
+    public static class AppListFragmentTM extends NeedShowAgainModule {
+
+        private AppListFragment appListFragment;
+        private int id;
+
+        public AppListFragmentTM(int id){
+            this.id = id;
+        }
+
+        protected void doInit() {
+            this.appListFragment = new AppListFragment();
+            this.appListFragment.setArguments(getBundle());
+        }
+
+        protected void doShow() {
+            addAndCommit(id, this.appListFragment);
+        }
     }
 
 

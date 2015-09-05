@@ -6,10 +6,6 @@
 
     <application
         android:allowBackup="true">
-        <activity
-            android:name="com.example.market.ljw.glowpadview.LockActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

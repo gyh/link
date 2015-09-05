@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layoutwelcome"
-    android:background="@drawable/ljw_loading">
+    android:id="@+id/layoutwelcome">
 
 </LinearLayout>

@@ -5,7 +5,6 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.example.market.ljw.core.common.frame.AppContext;
-import com.example.market.ljw.core.common.frame.MyAppContext;
 
 
 /**
@@ -26,7 +25,7 @@ public class DPIUtil {
 
     public static Display getDefaultDisplay() {
         if (defaultDisplay == null)
-            defaultDisplay = ((WindowManager) MyAppContext.getInstance().getSystemService(Context.WINDOW_SERVICE))
+            defaultDisplay = ((WindowManager) AppContext.getInstance().getSystemService(Context.WINDOW_SERVICE))
                     .getDefaultDisplay();
         return defaultDisplay;
     }

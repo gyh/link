@@ -1,6 +1,5 @@
-package com.example.market.ljw.entity.bean.output;
+package com.example.market.ljw.entity.bean;
 
-import com.example.market.ljw.entity.bean.Entity;
 import com.example.market.ljw.entity.bean.output.Member;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -10,7 +9,7 @@ import com.google.gson.JsonParser;
 /**
  * Created by GYH on 2014/11/9.
  */
-public class LoginOutput extends Entity {
+public class LoginOutput extends Entity{
 
     Gson gson = new Gson();
     private Member member;
