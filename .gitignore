@@ -12,3 +12,6 @@ apks
 library/library.iml
 library\service\lock\lock.iml
 .idea\modules.xml
+library\service\service.iml
+library\function\function.iml
+library\function\entity\entity.iml
