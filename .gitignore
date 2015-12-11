@@ -15,3 +15,15 @@ library\service\lock\lock.iml
 library\service\service.iml
 library\function\function.iml
 library\function\entity\entity.iml
+.idea/compiler.xml
+.idea/encodings.xml
+.idea/gradle.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
+library/Function/NiftyDialogEffects/NiftyDialogEffects.iml
+library/Function/entity/entity.iml
+library/Function/function.iml
+library/service/lock/lock.iml
+library/service/service.iml
+settings.gradle

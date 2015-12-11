@@ -1,6 +1,7 @@
 package com.example.market.ljw.ui;
 
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -124,8 +125,9 @@ public class MainActivity extends BaseActivity {
         carouselFragmentTM = new CarouselFragment.CarouselFragmentTM(R.id.carouselfragment);
         ApplicationManager.simpleGo(carouselFragmentTM);
         //列表
-        appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
-        ApplicationManager.go(appListFragmentTM);
+        showMarkList();
+//        appListFragmentTM = new AppListFragment.AppListFragmentTM(R.id.contain);
+//        ApplicationManager.go(appListFragmentTM);
 
     }
 
@@ -158,6 +160,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 初始化视图
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void initView() {
         logimg = findViewById(R.id.logimg);
         ljwview = (FrameLayout) findViewById(R.id.layoutljw);

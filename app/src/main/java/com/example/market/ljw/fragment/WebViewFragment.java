@@ -1,5 +1,6 @@
 package com.example.market.ljw.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +17,29 @@ import android.widget.LinearLayout;
 
 import com.example.market.ljw.R;
 import com.example.market.ljw.core.common.frame.MyActivity;
+import com.example.market.ljw.core.common.frame.taskstack.ApplicationManager;
 import com.example.market.ljw.core.common.frame.taskstack.NeedShowAgainModule;
 import com.example.market.ljw.core.utils.Constant;
 import com.example.market.ljw.core.utils.PromptUtil;
+import com.example.market.ljw.ui.LoginActivity;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by GYH on 2014/10/21.
  */
 public class WebViewFragment extends MyActivity {
+
+    private String H5_REDIRECT_URL = "ljwphone://LJWH5/";
+
+    public static final int LJW_SIGN_OUT_APP = 1000;//退出应用
+
+    public static final int LJW_SIGN_OUT_H5 = 1001;//退出h5
 
     public static WebView mWebView;
     private View fragmentview;
@@ -69,6 +83,37 @@ public class WebViewFragment extends MyActivity {
         //设置点击在本地打开
         WebViewClient client = new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                try {
+                    url = java.net.URLDecoder.decode(url, "utf-8");
+                    if (url != null && url.contains(H5_REDIRECT_URL)) {
+                        String data = url.replace(H5_REDIRECT_URL, "");
+                        data = data.replace("page_type","PAGE_TYPE").replace("page_key", "PAGE_KEY");
+                        JsonParser jsonParser = new JsonParser();
+                        JsonElement jsonElement = jsonParser.parse(data);
+                        JsonObject jsonObject = jsonElement.getAsJsonObject();
+                        int pageType = jsonObject.get("PAGE_TYPE").getAsInt();
+                        String pageKey = null;//备用字段
+                        if(jsonObject.has("PAGE_KEY")){
+                            JsonElement pageKeyElement = jsonObject.get("PAGE_KEY");
+                            if(pageKeyElement.isJsonObject()){
+                                pageKey = jsonObject.get("PAGE_KEY").getAsJsonObject().toString();
+                            }else{
+                                pageKey = jsonObject.get("PAGE_KEY").getAsString();
+                            }
+                        }
+                        switch (pageType){
+                            case LJW_SIGN_OUT_H5:
+                                ApplicationManager.back();
+                                break;
+                            case LJW_SIGN_OUT_APP:
+                                getThisActivity().finish();
+//                                startActivity(new Intent(getThisActivity(), LoginActivity.class));
+                                break;
+                        }
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 view.loadUrl(url);
                 return true;
             }
