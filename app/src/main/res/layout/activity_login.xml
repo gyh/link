@@ -43,7 +43,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/logo_login"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    android:visibility="invisible"/>
                 <TextView
                     android:id="@+id/tv_version"
                     android:layout_width="wrap_content"

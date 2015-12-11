@@ -35,7 +35,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class WebViewFragment extends MyActivity {
 
-    private String H5_REDIRECT_URL = "ljwphone://LJWH5/";
+    private String H5_REDIRECT_URL = Constant.LJWBASE_URL+"MemberShop/Login.aspx";
 
     public static final int LJW_SIGN_OUT_APP = 1000;//退出应用
 
@@ -86,30 +86,10 @@ public class WebViewFragment extends MyActivity {
                 try {
                     url = java.net.URLDecoder.decode(url, "utf-8");
                     if (url != null && url.contains(H5_REDIRECT_URL)) {
-                        String data = url.replace(H5_REDIRECT_URL, "");
-                        data = data.replace("page_type","PAGE_TYPE").replace("page_key", "PAGE_KEY");
-                        JsonParser jsonParser = new JsonParser();
-                        JsonElement jsonElement = jsonParser.parse(data);
-                        JsonObject jsonObject = jsonElement.getAsJsonObject();
-                        int pageType = jsonObject.get("PAGE_TYPE").getAsInt();
-                        String pageKey = null;//备用字段
-                        if(jsonObject.has("PAGE_KEY")){
-                            JsonElement pageKeyElement = jsonObject.get("PAGE_KEY");
-                            if(pageKeyElement.isJsonObject()){
-                                pageKey = jsonObject.get("PAGE_KEY").getAsJsonObject().toString();
-                            }else{
-                                pageKey = jsonObject.get("PAGE_KEY").getAsString();
-                            }
-                        }
-                        switch (pageType){
-                            case LJW_SIGN_OUT_H5:
-                                ApplicationManager.back();
-                                break;
-                            case LJW_SIGN_OUT_APP:
-                                getThisActivity().finish();
-//                                startActivity(new Intent(getThisActivity(), LoginActivity.class));
-                                break;
-                        }
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(),LoginActivity.class);
+                        getActivity().startActivity(intent);
+                        getActivity().finish();
                     }
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
