@@ -37,7 +37,7 @@ public class PromptUtil {
             return;
         }
         dialogBuilder
-                .withTitle("链接网")                                  //.withTitle(null)  no title
+                .withTitle("超级会员")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
                 .withMessage("确定要退出积分系统！")                     //.withMessage(null)  no Msg
@@ -63,7 +63,7 @@ public class PromptUtil {
     public static void showXiaomiInfo(BaseActivity baseActivity, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
                                      View.OnClickListener clickfirst,View.OnClickListener clicksecond){
         dialogBuilder
-                .withTitle("链接网")                                  //.withTitle(null)  no title
+                .withTitle("超级会员")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
                 .withMessage("请先设置悬浮窗口！")                     //.withMessage(null)  no Msg
@@ -84,7 +84,7 @@ public class PromptUtil {
     public static void showIsNetWork(BaseActivity baseActivity, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
                                       View.OnClickListener clickfirst,View.OnClickListener clicksecond){
         dialogBuilder
-                .withTitle("链接网")                                  //.withTitle(null)  no title
+                .withTitle("超级会员")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
                 .withMessage("请连接网络！")                     //.withMessage(null)  no Msg
@@ -105,7 +105,7 @@ public class PromptUtil {
     public static void showNewerVersion(Context context, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
                                         View.OnClickListener clickfirst,View.OnClickListener clicksecond,String msg){
         dialogBuilder
-                .withTitle("链接网")                                  //.withTitle(null)  no title
+                .withTitle("超级会员")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
                 .withMessage(msg)                     //.withMessage(null)  no Msg
@@ -126,7 +126,7 @@ public class PromptUtil {
     public static void showonJsConfirm(Context context, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
                                         View.OnClickListener clickfirst,View.OnClickListener clicksecond,String msg){
         dialogBuilder
-                .withTitle("链接网")                                  //.withTitle(null)  no title
+                .withTitle("超级会员")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
                 .withMessage(msg)                     //.withMessage(null)  no Msg
@@ -148,7 +148,7 @@ public class PromptUtil {
     public static void showonJsAlert(Context context, Effectstype effect, NiftyDialogBuilder dialogBuilder,View view,
                                        View.OnClickListener clickfirst,String msg){
         dialogBuilder
-                .withTitle("链接网")                                  //.withTitle(null)  no title
+                .withTitle("超级会员")                                  //.withTitle(null)  no title
                 .withTitleColor("#FFFFFF")                                  //def
                 .withDividerColor("#11000000")                              //def
                 .withMessage(msg)                     //.withMessage(null)  no Msg

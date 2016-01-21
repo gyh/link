@@ -95,7 +95,7 @@ public class AppListFragment extends MyActivity implements AdapterView.OnItemCli
                 AppData appData = new AppData();
                 List<ApplicationInfo> applicationInfos = Utils.getInstallAppInfo(getActivity());
                 AppsItemInfo ljw = new AppsItemInfo();
-                ljw.setlabelName("链接网");
+                ljw.setlabelName("超级会员");
                 appData.getAppsItemInfos().add(ljw);
                 appData.getIntentList().add(null);
                 for (int i = 0; i < applicationInfos.size(); i++) {

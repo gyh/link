@@ -86,9 +86,9 @@ public class WebViewFragment extends MyActivity {
                 try {
                     url = java.net.URLDecoder.decode(url, "utf-8");
                     if (url != null && url.contains(H5_REDIRECT_URL)) {
-                        Intent intent = new Intent();
-                        intent.setClass(getActivity(),LoginActivity.class);
-                        getActivity().startActivity(intent);
+//                        Intent intent = new Intent();
+//                        intent.setClass(getActivity(),LoginActivity.class);
+//                        getActivity().startActivity(intent);
                         getActivity().finish();
                     }
                 } catch (UnsupportedEncodingException e) {
